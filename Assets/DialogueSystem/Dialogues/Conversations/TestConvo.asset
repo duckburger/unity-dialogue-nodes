@@ -17,8 +17,8 @@ MonoBehaviour:
     id: 268434259
     windowRect:
       serializedVersion: 2
-      x: 257
-      y: 201
+      x: -420
+      y: 213
       width: 200
       height: 300
     windowTitle: NPC Dialogue Node
@@ -30,8 +30,8 @@ MonoBehaviour:
     id: 1177365478
     windowRect:
       serializedVersion: 2
-      x: 878
-      y: 182
+      x: 79
+      y: 219
       width: 200
       height: 300
     windowTitle: NPC Dialogue Node
@@ -43,28 +43,78 @@ MonoBehaviour:
     id: 1899712466
     windowRect:
       serializedVersion: 2
-      x: 1238
-      y: 114
+      x: 352
+      y: 196
+      width: 200
+      height: 300
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: 7af32d02d2cb8a5b
+    incomingTransitions: a4702d57
+    dialogueLine: rrrrrrrrrrrrrrrr
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  - containingConversation: {fileID: 11400000}
+    id: 825875828
+    windowRect:
+      serializedVersion: 2
+      x: 980
+      y: 41
       width: 200
       height: 300
     windowTitle: NPC Dialogue Node
     outgoingTransitions: 
-    incomingTransitions: a4702d57
-    dialogueLine: rrrrrrrrrrrrrrrr
+    incomingTransitions: bfd6353a
+    dialogueLine: ertertert
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  - containingConversation: {fileID: 11400000}
+    id: 1549936235
+    windowRect:
+      serializedVersion: 2
+      x: 983
+      y: 386
+      width: 200
+      height: 300
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: 
+    incomingTransitions: 87a66c37
+    dialogueLine: bnmbnmbnmbnm
     speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
   allPlayerNodes:
   - containingConversation: {fileID: 11400000}
     id: 1435864654
     windowRect:
       serializedVersion: 2
-      x: 607
-      y: 292
+      x: -163
+      y: 184
       width: 200
       height: 128
     windowTitle: Player Response Node
     outgoingTransitions: 51167078
     incomingTransitions: c717ee01
     dialogueLine: wwwwwwwwwwwwwwwww
+  - containingConversation: {fileID: 11400000}
+    id: 113089690
+    windowRect:
+      serializedVersion: 2
+      x: 660
+      y: 161
+      width: 200
+      height: 128
+    windowTitle: Player Response Node
+    outgoingTransitions: bfd6353a
+    incomingTransitions: 7af32d02
+    dialogueLine: 1 test
+  - containingConversation: {fileID: 11400000}
+    id: 1214630531
+    windowRect:
+      serializedVersion: 2
+      x: 656
+      y: 388
+      width: 200
+      height: 128
+    windowTitle: Player Response Node
+    outgoingTransitions: 87a66c37
+    incomingTransitions: d2cb8a5b
+    dialogueLine: 2 test
   allTransitions:
   - id: 32380871
     containingConversation: {fileID: 11400000}
@@ -73,8 +123,8 @@ MonoBehaviour:
       id: 268434259
       windowRect:
         serializedVersion: 2
-        x: 257
-        y: 201
+        x: -420
+        y: 213
         width: 200
         height: 300
       windowTitle: NPC Dialogue Node
@@ -114,8 +164,8 @@ MonoBehaviour:
       id: 1435864654
       windowRect:
         serializedVersion: 2
-        x: 607
-        y: 292
+        x: -163
+        y: 184
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -143,8 +193,8 @@ MonoBehaviour:
       id: 1177365478
       windowRect:
         serializedVersion: 2
-        x: 878
-        y: 182
+        x: 79
+        y: 219
         width: 200
         height: 300
       windowTitle: NPC Dialogue Node
@@ -157,8 +207,8 @@ MonoBehaviour:
       id: 1435864654
       windowRect:
         serializedVersion: 2
-        x: 607
-        y: 292
+        x: -163
+        y: 184
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -185,8 +235,8 @@ MonoBehaviour:
       id: 1177365478
       windowRect:
         serializedVersion: 2
-        x: 878
-        y: 182
+        x: 79
+        y: 219
         width: 200
         height: 300
       windowTitle: NPC Dialogue Node
@@ -199,12 +249,12 @@ MonoBehaviour:
       id: 1899712466
       windowRect:
         serializedVersion: 2
-        x: 1238
-        y: 114
+        x: 352
+        y: 196
         width: 200
         height: 300
       windowTitle: NPC Dialogue Node
-      outgoingTransitions: 
+      outgoingTransitions: 7af32d02d2cb8a5b
       incomingTransitions: a4702d57
       dialogueLine: rrrrrrrrrrrrrrrr
       speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
@@ -221,6 +271,230 @@ MonoBehaviour:
       outgoingTransitions: 
       incomingTransitions: 
       dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  - id: 36565882
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 1899712466
+      windowRect:
+        serializedVersion: 2
+        x: 352
+        y: 196
+        width: 200
+        height: 300
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 7af32d02d2cb8a5b
+      incomingTransitions: a4702d57
+      dialogueLine: rrrrrrrrrrrrrrrr
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      speaker: {fileID: 0}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 113089690
+      windowRect:
+        serializedVersion: 2
+        x: 660
+        y: 161
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: bfd6353a
+      incomingTransitions: 7af32d02
+      dialogueLine: 1 test
+  - id: 1535822802
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 1899712466
+      windowRect:
+        serializedVersion: 2
+        x: 352
+        y: 196
+        width: 200
+        height: 300
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 7af32d02d2cb8a5b
+      incomingTransitions: a4702d57
+      dialogueLine: rrrrrrrrrrrrrrrr
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      speaker: {fileID: 0}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 1214630531
+      windowRect:
+        serializedVersion: 2
+        x: 656
+        y: 388
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: 87a66c37
+      incomingTransitions: d2cb8a5b
+      dialogueLine: 2 test
+  - id: 976606911
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      speaker: {fileID: 0}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 825875828
+      windowRect:
+        serializedVersion: 2
+        x: 980
+        y: 41
+        width: 200
+        height: 300
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: bfd6353a
+      dialogueLine: ertertert
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 113089690
+      windowRect:
+        serializedVersion: 2
+        x: 660
+        y: 161
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: bfd6353a
+      incomingTransitions: 7af32d02
+      dialogueLine: 1 test
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  - id: 929867399
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      speaker: {fileID: 0}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 1549936235
+      windowRect:
+        serializedVersion: 2
+        x: 983
+        y: 386
+        width: 200
+        height: 300
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: 87a66c37
+      dialogueLine: bnmbnmbnmbnm
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 1214630531
+      windowRect:
+        serializedVersion: 2
+        x: 656
+        y: 388
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: 87a66c37
+      incomingTransitions: d2cb8a5b
+      dialogueLine: 2 test
     endPlayerNode:
       containingConversation: {fileID: 0}
       id: 0

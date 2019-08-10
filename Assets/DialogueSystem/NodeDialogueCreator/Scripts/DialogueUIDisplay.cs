@@ -81,7 +81,11 @@ public class DialogueUIDisplay : MonoBehaviour
             return;
         }
 
-        LeanTween.moveLocalY(repliesParent.gameObject, originalRepliesPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeOutSine);
+        LeanTween.moveLocalY(repliesParent.gameObject, originalRepliesPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeOutSine)
+        .setOnComplete(() => 
+        {
+            DestroyAllReplyNodes();
+        });
     }
 
 #endregion
@@ -135,13 +139,13 @@ public class DialogueUIDisplay : MonoBehaviour
         if (currentNode.GetConnectedPlayerResponses().Count > 0)
         {
             // Display player responses
-            ShowReplies(currentNode.GetConnectedPlayerResponses());
-
+            ShowReplies(currentNode.GetConnectedPlayerResponses());            
         }
         else if (currentNode.GetConnectedNPCLines().Count > 0)
         {
             // Display NPC responses
-            DisplayLine(activeConversation.GetNPCNodyByID(currentNode.GetConnectedNPCLines()[0]));
+            currentNode = activeConversation.GetNPCNodyByID(currentNode.GetConnectedNPCLines()[0]);
+            DisplayLine(currentNode);
         }
     }
 
@@ -177,11 +181,20 @@ public class DialogueUIDisplay : MonoBehaviour
     }   
 
 
-    public void DisplayNextLine()
-    {
+#endregion
 
+
+    void DestroyAllReplyNodes()
+    {
+        for (int i = repliesParent.childCount - 1; i >= 0; i--)
+        {
+            Destroy(repliesParent.GetChild(i).gameObject);
+        }
     }
 
-#endregion
+    public void Close()
+    {
+        
+    }
 
 }
