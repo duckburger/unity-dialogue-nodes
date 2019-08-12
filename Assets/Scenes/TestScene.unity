@@ -237,22 +237,6 @@ PrefabInstance:
       propertyPath: m_Pivot.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4151198465402100387, guid: 54f99dc987963f64d80e74a286cfb352,
-        type: 3}
-      propertyPath: activeConversation
-      value: 
-      objectReference: {fileID: 11400000, guid: 268d0be198f3bc64d8b21d1e07ca118c,
-        type: 2}
-    - target: {fileID: 3614941853604085368, guid: 54f99dc987963f64d80e74a286cfb352,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 200
-      objectReference: {fileID: 0}
-    - target: {fileID: 3614941853604085368, guid: 54f99dc987963f64d80e74a286cfb352,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 50
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 54f99dc987963f64d80e74a286cfb352, type: 3}
 --- !u!114 &107761667 stripped

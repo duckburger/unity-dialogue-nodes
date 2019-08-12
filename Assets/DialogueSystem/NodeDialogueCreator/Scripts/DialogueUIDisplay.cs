@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using System;
 
 public class DialogueUIDisplay : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class DialogueUIDisplay : MonoBehaviour
     [SerializeField] TextMeshProUGUI dialogueLine;
     [SerializeField] Image speakerIcon;
     [SerializeField] Transform repliesParent;
+    [SerializeField] CanvasGroup continueButtonCG;
+
     [Space(10)]
     [SerializeField] GameObject responsePrefab;
     IDialogueNode currentNode;
@@ -143,9 +146,11 @@ public class DialogueUIDisplay : MonoBehaviour
         }
         else if (currentNode.GetConnectedNPCLines().Count > 0)
         {
-            // Display NPC responses
-            currentNode = activeConversation.GetNPCNodyByID(currentNode.GetConnectedNPCLines()[0]);
-            DisplayLine(currentNode);
+            ShowContinueButton(true);
+        }
+        else
+        {
+            SpawnDoneButton();
         }
     }
 
@@ -159,16 +164,11 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         for (int i = 0; i < replyIDs.Count; i++)
-        {
-            GameObject spawnedReply = Instantiate(responsePrefab, Vector3.zero, Quaternion.identity, repliesParent);
-            TextMeshProUGUI replyText = spawnedReply.GetComponentInChildren<TextMeshProUGUI>();
-            Button replyButton = spawnedReply.GetComponent<Button>();
-
+        {        
             PlayerDialogueNode playerResponseNode = activeConversation.GetPlayerNodeByID(replyIDs[i]);
-            replyText.text = playerResponseNode.dialogueLine;
             NPCDialogueNode connectedNPCNode = activeConversation.GetNPCNodyByID(activeConversation.GetTransitionByID(playerResponseNode.outgoingTransitions[0]).endNPCNode.id);                           
 
-            replyButton.onClick.AddListener(() => 
+            SpawnButton(playerResponseNode.dialogueLine, () =>
             {
                 AnimateRepliesOut();
                 IDialogueNode savedNode = connectedNPCNode;
@@ -179,6 +179,44 @@ public class DialogueUIDisplay : MonoBehaviour
 
         AnimateRepliesIn();
     }   
+
+    void SpawnButton(string buttonTitle, Action buttonAction)
+    {
+        GameObject spawnedReply = Instantiate(responsePrefab, Vector3.zero, Quaternion.identity, repliesParent);
+        TextMeshProUGUI replyText = spawnedReply.GetComponentInChildren<TextMeshProUGUI>();
+        Button replyButton = spawnedReply.GetComponent<Button>();
+
+        replyText.text = buttonTitle;
+        replyButton.onClick.AddListener(buttonAction.Invoke);
+    }
+
+    void SpawnDoneButton()
+    {
+        SpawnButton("Done", Close);
+
+        AnimateRepliesIn();
+    }
+
+    void ShowContinueButton(bool enabled)
+    {
+        if (enabled)
+        {   
+            LeanTween.alphaCanvas(continueButtonCG, 1, 0.23f).setOnComplete(() => 
+            {
+                continueButtonCG.blocksRaycasts = enabled;
+                continueButtonCG.interactable = enabled;
+            });
+        }
+        else
+        {
+            LeanTween.alphaCanvas(continueButtonCG, 0, 0.18f).setOnComplete(() => 
+            {
+                continueButtonCG.blocksRaycasts = enabled;
+                continueButtonCG.interactable = enabled;
+            });
+        }
+       
+    }
 
 
 #endregion
@@ -194,7 +232,16 @@ public class DialogueUIDisplay : MonoBehaviour
 
     public void Close()
     {
-        
+        AnimateOut();
+        DestroyAllReplyNodes();
+    }
+
+    public void Continue()
+    {
+        // Display NPC responses
+        currentNode = activeConversation.GetNPCNodyByID(currentNode.GetConnectedNPCLines()[0]);
+        DisplayLine(currentNode);
+        ShowContinueButton(false);
     }
 
 }
