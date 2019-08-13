@@ -22,6 +22,7 @@ public class DialogueUIDisplay : MonoBehaviour
     IDialogueNode currentNode;
     Vector2 originalBoxPosition;
     Vector2 originalRepliesPosition;
+    Action onCurrentConvoCompleted = null;
 
     bool onScreen = false;
 
@@ -95,7 +96,17 @@ public class DialogueUIDisplay : MonoBehaviour
 
 #region Processing Conversation Asset
 
+    public void AssignActiveConversation(ConversationAsset asset)
+    {
+        activeConversation = asset;
+    }
+
     public void ProcessActiveConversation()
+    {
+        ProcessActiveConversation(null);
+    }
+
+    public void ProcessActiveConversation(Action onConversationCompleted = null)
     {
         if (!activeConversation)
         {
@@ -108,6 +119,8 @@ public class DialogueUIDisplay : MonoBehaviour
             Debug.Log($"No nodes in the active conversation, can't play dialogue");
             return;
         }
+
+        onCurrentConvoCompleted = onConversationCompleted;
 
         if (!onScreen)
             AnimateIn();
@@ -132,6 +145,16 @@ public class DialogueUIDisplay : MonoBehaviour
 
     IEnumerator RollOutLine(string line)
     {
+        if (currentNode is NPCDialogueNode)
+        {
+            NPCDialogueNode npcNode = currentNode as NPCDialogueNode;
+            if (npcNode.speaker && npcNode.speaker.icon && !speakerIcon)
+            {
+                Debug.LogError($"Connect speaker icon to the Dialogue UI Display");
+            }
+            speakerIcon.sprite = npcNode.speaker.icon;
+            speakerName.text = npcNode.speaker.name;
+        }
         dialogueLine.text = "";
         foreach (char character in line)
         {
@@ -192,7 +215,11 @@ public class DialogueUIDisplay : MonoBehaviour
 
     void SpawnDoneButton()
     {
-        SpawnButton("Done", Close);
+        SpawnButton("Done", () => 
+        {
+            Close();
+            onCurrentConvoCompleted?.Invoke();
+        });
 
         AnimateRepliesIn();
     }
@@ -234,6 +261,7 @@ public class DialogueUIDisplay : MonoBehaviour
     {
         AnimateOut();
         DestroyAllReplyNodes();
+        onCurrentConvoCompleted?.Invoke();
     }
 
     public void Continue()
