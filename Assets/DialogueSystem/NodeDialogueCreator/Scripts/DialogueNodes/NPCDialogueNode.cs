@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System;
+using UnityEngine.Events;
+using System.Reflection;
+using System.IO;
 
 [System.Serializable]
 public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
@@ -15,15 +18,24 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
     public List<int> incomingTransitions = new List<int>();
     [TextArea(3, 10)]
     public string dialogueLine;
+    public DialogueNodeEvent attachedEvent;
+
+#region Paths
+
+    string pathToConvoAsset;
+    string fullPathToAsset;
+
+#endregion
 
     public NPCDialogueNode(Rect rect, string title, ConversationAsset convo)
     {
         this.windowRect = rect;
         this.windowTitle = title;
         this.containingConversation = convo;
+        this.pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
         id = UnityEngine.Random.Range(1, Int32.MaxValue);
         while (containingConversation.GetNPCNodyByID(id) != null)
-            id = UnityEngine.Random.Range(1, Int32.MaxValue);
+            id = UnityEngine.Random.Range(1, Int32.MaxValue);        
     }
 
     public DialogueCharacter speaker;
@@ -44,14 +56,57 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
             speaker.name = EditorGUILayout.TextField(speaker.name);
             GUILayout.Label("Character Text Color");
             speaker.textColor = EditorGUILayout.ColorField(speaker.textColor);
-            GUILayout.EndVertical();
-            
+            GUILayout.EndVertical();            
             EditorGUILayout.LabelField("Dialogue Line");
             EditorStyles.textField.wordWrap = true;
-            dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));
-            windowRect.height = 300f;
+            dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));   
+            
+            EditorGUI.BeginChangeCheck();
+
+            if (!attachedEvent)
+            {
+                if (GUILayout.Button("+ Event"))
+                {                    
+                    if (string.IsNullOrEmpty(pathToConvoAsset))
+                    {
+                        pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
+                    }
+                    DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
+                    string directoryName = $"{containingConversation.name}_events";
+                    string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);                    
+                    fullPathToAsset = $"{pathToFolder}\\{containingConversation.name}_Events";
+                    if ( !Directory.Exists( fullPathToAsset ) )
+                    {
+                        Directory.CreateDirectory( fullPathToAsset );
+                    }
+                    AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{containingConversation.allNPCNodes.IndexOf(this)}.asset");
+                    AssetDatabase.SaveAssets();
+                    AssetDatabase.Refresh();
+                    attachedEvent = newEvent;
+                }
+            }
+            else
+            {
+                if (GUILayout.Button("- Event"))
+                {
+                    if (attachedEvent)
+                    {
+                        bool deleted = AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(attachedEvent));
+                        Debug.Log($"Event was deleted = {deleted}");
+                        if (!deleted)
+                            attachedEvent = null;
+                        AssetDatabase.Refresh();
+                    }
+                }
+                EditorGUILayout.ObjectField(attachedEvent as UnityEngine.Object, typeof(DialogueNodeEvent), false);
+            }
+
+            EditorGUI.EndChangeCheck();            
+
+            windowRect.height = 350f;
         }                
     }
+
 
     public void Drag(Vector2 dragDelta)
     {

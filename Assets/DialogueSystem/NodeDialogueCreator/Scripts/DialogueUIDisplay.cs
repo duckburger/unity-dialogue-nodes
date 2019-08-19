@@ -145,9 +145,9 @@ public class DialogueUIDisplay : MonoBehaviour
 
     IEnumerator RollOutLine(string line)
     {
-        if (currentNode is NPCDialogueNode)
+        NPCDialogueNode npcNode = currentNode as NPCDialogueNode;
+        if (npcNode != null)
         {
-            NPCDialogueNode npcNode = currentNode as NPCDialogueNode;
             if (npcNode.speaker && npcNode.speaker.icon && !speakerIcon)
             {
                 Debug.LogError($"Connect speaker icon to the Dialogue UI Display");
@@ -161,7 +161,10 @@ public class DialogueUIDisplay : MonoBehaviour
             dialogueLine.text += character;
             yield return null;
         }
-
+        if (npcNode != null)
+        {
+            npcNode?.attachedEvent?.Raise();
+        }
         if (currentNode.GetConnectedPlayerResponses().Count > 0)
         {
             // Display player responses

@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e3446a875e24ac94b821827a133ab369, type: 3}
-  m_Name: Speaker1
+  m_Script: {fileID: 11500000, guid: 902adf6d5d35dc245889791aae31217d, type: 3}
+  m_Name: EventForNode#-1
   m_EditorClassIdentifier: 
-  charName: Speaker1
-  icon: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
-  textColor: {r: 0, g: 0, b: 0, a: 1}
