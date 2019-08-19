@@ -9,6 +9,11 @@ public class DialogueEventListener : MonoBehaviour
 
     private void OnEnable() 
     {
-        // eventToListenFor?.    
+        eventToListenFor?.RegisterListener(this); 
+    }
+
+    private void OnDisable()   
+    {
+        eventToListenFor?.RemoveListener(this);    
     }
 }

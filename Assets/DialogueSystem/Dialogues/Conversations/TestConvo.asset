@@ -38,7 +38,7 @@ MonoBehaviour:
     windowTitle: NPC Dialogue Node
     outgoingTransitions: 
     incomingTransitions: af00ca51
-    dialogueLine: 
+    dialogueLine: Hi, this is a reply
     attachedEvent: {fileID: 0}
     speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
   allPlayerNodes:
@@ -142,7 +142,7 @@ MonoBehaviour:
       windowTitle: NPC Dialogue Node
       outgoingTransitions: 
       incomingTransitions: af00ca51
-      dialogueLine: 
+      dialogueLine: Hi, this is a reply
       attachedEvent: {fileID: 0}
       speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
     startPlayerNode:
