@@ -10,7 +10,10 @@ public interface IDialogueNode
     List<int> GetConnectedPlayerResponses();
     List<int> GetConnectedNPCLines();
 
+#if UNITY_EDITOR
     void DrawWindow();
+#endif
+
     Rect WindowRect();
     void SetWindowRect(Rect rect);
     string DialogueLine();

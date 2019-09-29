@@ -18,14 +18,19 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
     public List<int> incomingTransitions = new List<int>();
     [TextArea(3, 10)]
     public string dialogueLine;
+    public AudioClip lineSoundEffect;
     public DialogueNodeEvent attachedEvent;
+
+    float windowHeight = 0;
 
 #region Paths
 
     string pathToConvoAsset;
     string fullPathToAsset;
 
-#endregion
+    #endregion
+
+#if UNITY_EDITOR
 
     public NPCDialogueNode(Rect rect, string title, ConversationAsset convo)
     {
@@ -38,14 +43,20 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
             id = UnityEngine.Random.Range(1, Int32.MaxValue);        
     }
 
+#endif
+
     public DialogueCharacter speaker;
+
+#if UNITY_EDITOR
+
     public void DrawWindow()
     {
         speaker = (DialogueCharacter) EditorGUILayout.ObjectField(speaker, typeof(DialogueCharacter), false);
+        windowHeight = 350f;
 
         if (speaker == null)
         {
-            EditorGUILayout.LabelField("Add a speaker to modify");
+            EditorGUILayout.LabelField("Add a speaker to modify");       
         }
         else
         {
@@ -59,8 +70,9 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
             GUILayout.EndVertical();            
             EditorGUILayout.LabelField("Dialogue Line");
             EditorStyles.textField.wordWrap = true;
-            dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));   
-            
+            dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));
+            lineSoundEffect = (AudioClip)EditorGUILayout.ObjectField(lineSoundEffect, typeof(AudioClip), false);
+
             EditorGUI.BeginChangeCheck();
 
             if (!attachedEvent)
@@ -87,6 +99,7 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
             }
             else
             {
+                windowHeight += 25f;
                 if (GUILayout.Button("- Event"))
                 {
                     if (attachedEvent)
@@ -103,11 +116,11 @@ public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
 
             EditorGUI.EndChangeCheck();            
 
-            windowRect.height = 350f;
+            windowRect.height = windowHeight;
         }                
     }
 
-
+#endif
     public void Drag(Vector2 dragDelta)
     {
         windowRect.position += dragDelta;

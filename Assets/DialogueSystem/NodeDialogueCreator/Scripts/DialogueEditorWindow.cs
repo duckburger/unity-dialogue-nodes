@@ -5,6 +5,8 @@ using UnityEditor;
 using System.Linq;
 using System;
 
+#if UNITY_EDITOR
+
 public class DialogueEditorWindow : EditorWindow
 {
     public static DialogueEditorWindow WindowInstance;
@@ -426,5 +428,7 @@ public class DialogueEditorWindow : EditorWindow
     }
 
 }
+
+#endif
 
 

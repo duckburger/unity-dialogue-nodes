@@ -16,6 +16,7 @@ public class PlayerDialogueNode: IDialogueNode, ISerializationCallbackReceiver
     [TextArea(3, 10)]
     public string dialogueLine;
 
+
     public PlayerDialogueNode(Rect window, string title, ConversationAsset convo)
     {
         this.windowRect = window;
@@ -24,13 +25,16 @@ public class PlayerDialogueNode: IDialogueNode, ISerializationCallbackReceiver
         id = UnityEngine.Random.Range(1, Int32.MaxValue);
         while (containingConversation.GetPlayerNodeByID(id) != null)
             id = UnityEngine.Random.Range(1, Int32.MaxValue);
-    }
 
+    }
+#if UNITY_EDITOR
     public void DrawWindow()
     {
         EditorStyles.textField.wordWrap = true;
         dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));
     }
+
+#endif
 
     public void Drag(Vector2 dragDelta)
     {

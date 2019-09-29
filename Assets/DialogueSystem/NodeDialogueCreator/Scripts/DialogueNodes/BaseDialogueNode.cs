@@ -17,6 +17,8 @@ public abstract class BaseDialogueNode
 
     public virtual void Drag(Vector2 dragDelta) {}
 
+#if UNITY_EDITOR
+
     public virtual void DeleteAllTransitions()
     {
         for (int i = 0; i < outgoingTransitions.Count; i++)
@@ -29,5 +31,7 @@ public abstract class BaseDialogueNode
             DialogueEditorWindow.WindowInstance.DeleteTransition(incomingTransitions[i]);
         }
     }
-    
+
+#endif
+
 }

@@ -4,9 +4,13 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using System;
+using UnityEngine.Events;
 
 public class DialogueUIDisplay : MonoBehaviour
 {
+    [SerializeField] ScriptableEvent onDialogueStarted;
+    [SerializeField] ScriptableEvent onDialogueEnded;
+    [Space(10)]
     [SerializeField] ConversationAsset activeConversation;
     [Space(10)]
     [Header("UI Components")]
@@ -16,6 +20,7 @@ public class DialogueUIDisplay : MonoBehaviour
     [SerializeField] Image speakerIcon;
     [SerializeField] Transform repliesParent;
     [SerializeField] CanvasGroup continueButtonCG;
+    [SerializeField] GameObject skipButton;
 
     [Space(10)]
     [SerializeField] GameObject responsePrefab;
@@ -23,6 +28,8 @@ public class DialogueUIDisplay : MonoBehaviour
     Vector2 originalBoxPosition;
     Vector2 originalRepliesPosition;
     Action onCurrentConvoCompleted = null;
+    CanvasGroup mainCG;
+    AudioSource audioSource;
 
     bool onScreen = false;
 
@@ -33,6 +40,8 @@ public class DialogueUIDisplay : MonoBehaviour
         originalBoxPosition = mainDialogueBox.localPosition;
         originalRepliesPosition = repliesParent.localPosition;
         AnimateOut();
+        mainCG = GetComponent<CanvasGroup>();
+        audioSource = GetComponent<AudioSource>();
     }
 
 #endregion
@@ -49,8 +58,17 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         onScreen = true;
-
-        LeanTween.moveLocalY(mainDialogueBox.gameObject, originalBoxPosition.y, 0.23f).setEase(LeanTweenType.easeOutSine);
+        if (mainCG)
+        {
+            mainCG.alpha = 1;
+            mainCG.blocksRaycasts = true;
+            mainCG.interactable = true;
+        }
+        LeanTween.value(mainDialogueBox.anchoredPosition.y, 0, 0.23f).setEase(LeanTweenType.easeOutSine)
+            .setOnUpdate((float val) => 
+            {
+                mainDialogueBox.anchoredPosition = new Vector2(mainDialogueBox.anchoredPosition.x, val);
+            });
     }
 
     public void AnimateOut()
@@ -63,7 +81,20 @@ public class DialogueUIDisplay : MonoBehaviour
 
         onScreen = false;
 
-        LeanTween.moveLocalY(mainDialogueBox.gameObject, originalBoxPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeInSine);
+        LeanTween.value(mainDialogueBox.anchoredPosition.y, mainDialogueBox.anchoredPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeInSine)
+            .setOnUpdate((float val) => 
+            {
+                mainDialogueBox.anchoredPosition = new Vector2(mainDialogueBox.anchoredPosition.x, val);
+            })
+            .setOnComplete(() =>
+            {
+                if (mainCG)
+                {
+                    mainCG.alpha = 0;
+                    mainCG.blocksRaycasts = false;
+                    mainCG.interactable = false;
+                }
+            });        
     }
 
     void AnimateRepliesIn()
@@ -92,9 +123,23 @@ public class DialogueUIDisplay : MonoBehaviour
         });
     }
 
-#endregion
+    #endregion
 
-#region Processing Conversation Asset
+    #region Accepting Object From an Event
+
+    public void AcceptConversationAssetFromEvent(object convoAsset)
+    {
+        ConversationAsset asset = (ConversationAsset)convoAsset;
+        AssignActiveConversation(asset);
+        if (!onScreen)
+            ProcessActiveConversation();
+        else
+            Debug.Log("Cannot load a new conversation, while the previous one is still on screen");
+    }
+
+    #endregion
+
+    #region Processing Conversation Asset
 
     public void AssignActiveConversation(ConversationAsset asset)
     {
@@ -103,6 +148,7 @@ public class DialogueUIDisplay : MonoBehaviour
 
     public void ProcessActiveConversation()
     {
+        onDialogueStarted?.Raise();
         ProcessActiveConversation(null);
     }
 
@@ -120,6 +166,11 @@ public class DialogueUIDisplay : MonoBehaviour
             return;
         }
 
+        if (activeConversation.skippable)
+            skipButton.SetActive(true);
+        else
+            skipButton.SetActive(false);
+
         onCurrentConvoCompleted = onConversationCompleted;
 
         if (!onScreen)
@@ -131,7 +182,6 @@ public class DialogueUIDisplay : MonoBehaviour
             {
                 // Found a node with only outbound transitions - this will be our first node
                 currentNode = activeConversation.GetNPCNodyByID( activeConversation.allNPCNodes[i].id );
-                
                 DisplayLine(currentNode);
             }
         }
@@ -146,6 +196,17 @@ public class DialogueUIDisplay : MonoBehaviour
     IEnumerator RollOutLine(string line)
     {
         NPCDialogueNode npcNode = currentNode as NPCDialogueNode;
+
+        if (npcNode != null)
+        {
+            if (audioSource && npcNode.lineSoundEffect)
+            {
+                audioSource.clip = npcNode.lineSoundEffect;
+                audioSource.Play();
+            }        
+            npcNode?.attachedEvent?.Raise();
+        }
+
         if (npcNode != null)
         {
             if (npcNode.speaker && npcNode.speaker.icon && !speakerIcon)
@@ -161,10 +222,7 @@ public class DialogueUIDisplay : MonoBehaviour
             dialogueLine.text += character;
             yield return null;
         }
-        if (npcNode != null)
-        {
-            npcNode?.attachedEvent?.Raise();
-        }
+   
         if (currentNode.GetConnectedPlayerResponses().Count > 0)
         {
             // Display player responses
@@ -192,8 +250,18 @@ public class DialogueUIDisplay : MonoBehaviour
         for (int i = 0; i < replyIDs.Count; i++)
         {        
             PlayerDialogueNode playerResponseNode = activeConversation.GetPlayerNodeByID(replyIDs[i]);
-            NPCDialogueNode connectedNPCNode = activeConversation.GetNPCNodyByID(activeConversation.GetTransitionByID(playerResponseNode.outgoingTransitions[0]).endNPCNode.id);                           
 
+            if (playerResponseNode.outgoingTransitions.Count == 0)
+            {
+                SpawnButton(playerResponseNode.dialogueLine, () =>
+                {
+                    Close();
+                    onCurrentConvoCompleted?.Invoke();
+                });
+                continue;
+            }
+
+            NPCDialogueNode connectedNPCNode = activeConversation.GetNPCNodyByID(activeConversation.GetTransitionByID(playerResponseNode.outgoingTransitions[0]).endNPCNode.id);
             SpawnButton(playerResponseNode.dialogueLine, () =>
             {
                 AnimateRepliesOut();
@@ -201,6 +269,7 @@ public class DialogueUIDisplay : MonoBehaviour
                 currentNode = savedNode;
                 DisplayLine(currentNode);
             });
+
         }
 
         AnimateRepliesIn();
@@ -265,6 +334,7 @@ public class DialogueUIDisplay : MonoBehaviour
         AnimateOut();
         DestroyAllReplyNodes();
         onCurrentConvoCompleted?.Invoke();
+        onDialogueEnded?.Raise();
     }
 
     public void Continue()

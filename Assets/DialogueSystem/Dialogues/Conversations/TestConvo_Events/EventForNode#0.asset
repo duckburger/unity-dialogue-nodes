@@ -10,5 +10,5 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 902adf6d5d35dc245889791aae31217d, type: 3}
-  m_Name: EventForNode#-1
+  m_Name: EventForNode#0
   m_EditorClassIdentifier: 

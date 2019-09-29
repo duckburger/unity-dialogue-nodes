@@ -17,28 +17,30 @@ MonoBehaviour:
     id: 833078304
     windowRect:
       serializedVersion: 2
-      x: 265
-      y: 107
+      x: 254
+      y: 131
       width: 200
-      height: 350
+      height: 375
     windowTitle: NPC Dialogue Node
     outgoingTransitions: 005e3501
     incomingTransitions: 
     dialogueLine: Testing1
-    attachedEvent: {fileID: 11400000, guid: e8ac162e356b3b64aa28a2baad99bbf7, type: 2}
+    lineSoundEffect: {fileID: 0}
+    attachedEvent: {fileID: 11400000, guid: 6689f8d96c187d447b26b65276ab1cb0, type: 2}
     speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
   - containingConversation: {fileID: 11400000}
     id: 1581424714
     windowRect:
       serializedVersion: 2
-      x: 922
-      y: 166
+      x: 961
+      y: 120
       width: 200
       height: 350
     windowTitle: NPC Dialogue Node
     outgoingTransitions: 
     incomingTransitions: af00ca51
     dialogueLine: Hi, this is a reply
+    lineSoundEffect: {fileID: 0}
     attachedEvent: {fileID: 0}
     speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
   allPlayerNodes:
@@ -46,8 +48,8 @@ MonoBehaviour:
     id: 1937793768
     windowRect:
       serializedVersion: 2
-      x: 566
-      y: 211
+      x: 627
+      y: 237
       width: 200
       height: 128
     windowTitle: Player Response Node
@@ -62,15 +64,16 @@ MonoBehaviour:
       id: 833078304
       windowRect:
         serializedVersion: 2
-        x: 265
-        y: 107
+        x: 254
+        y: 131
         width: 200
-        height: 350
+        height: 375
       windowTitle: NPC Dialogue Node
       outgoingTransitions: 005e3501
       incomingTransitions: 
       dialogueLine: Testing1
-      attachedEvent: {fileID: 11400000, guid: e8ac162e356b3b64aa28a2baad99bbf7, type: 2}
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 11400000, guid: 6689f8d96c187d447b26b65276ab1cb0, type: 2}
       speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
     endNPCNode:
       containingConversation: {fileID: 0}
@@ -85,6 +88,7 @@ MonoBehaviour:
       outgoingTransitions: 
       incomingTransitions: 
       dialogueLine: 
+      lineSoundEffect: {fileID: 0}
       attachedEvent: {fileID: 0}
       speaker: {fileID: 0}
     startPlayerNode:
@@ -105,8 +109,8 @@ MonoBehaviour:
       id: 1937793768
       windowRect:
         serializedVersion: 2
-        x: 566
-        y: 211
+        x: 627
+        y: 237
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -128,6 +132,7 @@ MonoBehaviour:
       outgoingTransitions: 
       incomingTransitions: 
       dialogueLine: 
+      lineSoundEffect: {fileID: 0}
       attachedEvent: {fileID: 0}
       speaker: {fileID: 0}
     endNPCNode:
@@ -135,14 +140,15 @@ MonoBehaviour:
       id: 1581424714
       windowRect:
         serializedVersion: 2
-        x: 922
-        y: 166
+        x: 961
+        y: 120
         width: 200
         height: 350
       windowTitle: NPC Dialogue Node
       outgoingTransitions: 
       incomingTransitions: af00ca51
       dialogueLine: Hi, this is a reply
+      lineSoundEffect: {fileID: 0}
       attachedEvent: {fileID: 0}
       speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
     startPlayerNode:
@@ -150,8 +156,8 @@ MonoBehaviour:
       id: 1937793768
       windowRect:
         serializedVersion: 2
-        x: 566
-        y: 211
+        x: 627
+        y: 237
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -171,3 +177,4 @@ MonoBehaviour:
       outgoingTransitions: 
       incomingTransitions: 
       dialogueLine: 
+  skippable: 0

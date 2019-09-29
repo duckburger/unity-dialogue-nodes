@@ -45,7 +45,7 @@ public class DialogueTransition: ISerializationCallbackReceiver
         while (containingConversation.GetTransitionByID(id) != null)
             id = UnityEngine.Random.Range(0, Int32.MaxValue);
     }
-
+#if UNITY_EDITOR
     public void Draw()
     {        
         Vector3 startPos = Vector3.zero;
@@ -119,6 +119,8 @@ public class DialogueTransition: ISerializationCallbackReceiver
         // if (endPlayerNode == null && endNPCNode == null || string.IsNullOrEmpty(endPlayerNode.windowTitle) && string.IsNullOrEmpty(endNPCNode.windowTitle))
         GUI.changed = true;
     }
+
+#endif
 
     public void OnBeforeSerialize()
     {
