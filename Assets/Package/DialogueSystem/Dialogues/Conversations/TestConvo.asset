@@ -1,0 +1,327 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff965f00d1cf3f94ba90268b7c492f1f, type: 3}
+  m_Name: TestConvo
+  m_EditorClassIdentifier: 
+  allNPCNodes:
+  - containingConversation: {fileID: 11400000}
+    id: 833078304
+    windowRect:
+      serializedVersion: 2
+      x: 139
+      y: 241
+      width: 200
+      height: 375
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: c9365a2af6a93919
+    incomingTransitions: 
+    dialogueLine: Hi, this is a test conversation for you to play aroun with!
+    lineSoundEffect: {fileID: 0}
+    attachedEvent: {fileID: 11400000, guid: 6689f8d96c187d447b26b65276ab1cb0, type: 2}
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  - containingConversation: {fileID: 11400000}
+    id: 1581424714
+    windowRect:
+      serializedVersion: 2
+      x: 725
+      y: 2
+      width: 200
+      height: 350
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: 
+    incomingTransitions: af00ca51
+    dialogueLine: Yes, it is pretty amusing.
+    lineSoundEffect: {fileID: 0}
+    attachedEvent: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  - containingConversation: {fileID: 11400000}
+    id: 387285277
+    windowRect:
+      serializedVersion: 2
+      x: 724
+      y: 372
+      width: 200
+      height: 350
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: 
+    incomingTransitions: 5d385813
+    dialogueLine: Well, you clearly aren't very impressed. But that's ok.
+    lineSoundEffect: {fileID: 0}
+    attachedEvent: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  allPlayerNodes:
+  - containingConversation: {fileID: 11400000}
+    id: 1937793768
+    windowRect:
+      serializedVersion: 2
+      x: 419
+      y: 139
+      width: 200
+      height: 128
+    windowTitle: Player Response Node
+    outgoingTransitions: af00ca51
+    incomingTransitions: c9365a2a
+    dialogueLine: Oh, how cool!
+  - containingConversation: {fileID: 11400000}
+    id: 2120176327
+    windowRect:
+      serializedVersion: 2
+      x: 437
+      y: 398
+      width: 200
+      height: 128
+    windowTitle: Player Response Node
+    outgoingTransitions: 5d385813
+    incomingTransitions: f6a93919
+    dialogueLine: Whatever...
+  allTransitions:
+  - id: 1372192943
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 0}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 1581424714
+      windowRect:
+        serializedVersion: 2
+        x: 725
+        y: 2
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: af00ca51
+      dialogueLine: Yes, it is pretty amusing.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 1937793768
+      windowRect:
+        serializedVersion: 2
+        x: 419
+        y: 139
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: af00ca51
+      incomingTransitions: c9365a2a
+      dialogueLine: Oh, how cool!
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  - id: 710555337
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 833078304
+      windowRect:
+        serializedVersion: 2
+        x: 139
+        y: 241
+        width: 200
+        height: 375
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: c9365a2af6a93919
+      incomingTransitions: 
+      dialogueLine: Hi, this is a test conversation for you to play aroun with!
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 11400000, guid: 6689f8d96c187d447b26b65276ab1cb0, type: 2}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 0}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 1937793768
+      windowRect:
+        serializedVersion: 2
+        x: 419
+        y: 139
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: af00ca51
+      incomingTransitions: c9365a2a
+      dialogueLine: Oh, how cool!
+  - id: 423209462
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 833078304
+      windowRect:
+        serializedVersion: 2
+        x: 139
+        y: 241
+        width: 200
+        height: 375
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: c9365a2af6a93919
+      incomingTransitions: 
+      dialogueLine: Hi, this is a test conversation for you to play aroun with!
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 11400000, guid: 6689f8d96c187d447b26b65276ab1cb0, type: 2}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 0}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 2120176327
+      windowRect:
+        serializedVersion: 2
+        x: 437
+        y: 398
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: 5d385813
+      incomingTransitions: f6a93919
+      dialogueLine: Whatever...
+  - id: 324548701
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 0}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 387285277
+      windowRect:
+        serializedVersion: 2
+        x: 724
+        y: 372
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: 5d385813
+      dialogueLine: Well, you clearly aren't very impressed. But that's ok.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 11400000}
+      id: 2120176327
+      windowRect:
+        serializedVersion: 2
+        x: 437
+        y: 398
+        width: 200
+        height: 128
+      windowTitle: Player Response Node
+      outgoingTransitions: 5d385813
+      incomingTransitions: f6a93919
+      dialogueLine: Whatever...
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  skippable: 0

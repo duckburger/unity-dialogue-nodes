@@ -1,10 +1,10 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
 using TMPro;
-using UnityEngine.UI;
-using System;
+using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UI;
 
 public class DialogueUIDisplay : MonoBehaviour
 {
@@ -33,7 +33,7 @@ public class DialogueUIDisplay : MonoBehaviour
 
     bool onScreen = false;
 
-#region Awake / Start
+    #region Awake / Start
 
     private void Awake()
     {
@@ -44,10 +44,9 @@ public class DialogueUIDisplay : MonoBehaviour
         audioSource = GetComponent<AudioSource>();
     }
 
-#endregion
+    #endregion
 
-
-#region Animate In / Out
+    #region Animate In / Out
 
     public void AnimateIn()
     {
@@ -65,7 +64,7 @@ public class DialogueUIDisplay : MonoBehaviour
             mainCG.interactable = true;
         }
         LeanTween.value(mainDialogueBox.anchoredPosition.y, 0, 0.23f).setEase(LeanTweenType.easeOutSine)
-            .setOnUpdate((float val) => 
+            .setOnUpdate((float val) =>
             {
                 mainDialogueBox.anchoredPosition = new Vector2(mainDialogueBox.anchoredPosition.x, val);
             });
@@ -82,7 +81,7 @@ public class DialogueUIDisplay : MonoBehaviour
         onScreen = false;
 
         LeanTween.value(mainDialogueBox.anchoredPosition.y, mainDialogueBox.anchoredPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeInSine)
-            .setOnUpdate((float val) => 
+            .setOnUpdate((float val) =>
             {
                 mainDialogueBox.anchoredPosition = new Vector2(mainDialogueBox.anchoredPosition.x, val);
             })
@@ -94,7 +93,7 @@ public class DialogueUIDisplay : MonoBehaviour
                     mainCG.blocksRaycasts = false;
                     mainCG.interactable = false;
                 }
-            });        
+            });
     }
 
     void AnimateRepliesIn()
@@ -104,7 +103,7 @@ public class DialogueUIDisplay : MonoBehaviour
             Debug.LogError($"No replies parent connected");
             return;
         }
-        
+
         LeanTween.moveLocalY(repliesParent.gameObject, originalRepliesPosition.y, 0.23f).setEase(LeanTweenType.easeOutSine);
     }
 
@@ -117,10 +116,10 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         LeanTween.moveLocalY(repliesParent.gameObject, originalRepliesPosition.y - Screen.height / 2, 0.15f).setEase(LeanTweenType.easeOutSine)
-        .setOnComplete(() => 
-        {
-            DestroyAllReplyNodes();
-        });
+            .setOnComplete(() =>
+            {
+                DestroyAllReplyNodes();
+            });
     }
 
     #endregion
@@ -181,17 +180,16 @@ public class DialogueUIDisplay : MonoBehaviour
             if (activeConversation.allNPCNodes[i].incomingTransitions.Count <= 0 && activeConversation.allNPCNodes[i].outgoingTransitions.Count > 0)
             {
                 // Found a node with only outbound transitions - this will be our first node
-                currentNode = activeConversation.GetNPCNodyByID( activeConversation.allNPCNodes[i].id );
+                currentNode = activeConversation.GetNPCNodyByID(activeConversation.allNPCNodes[i].id);
                 DisplayLine(currentNode);
             }
         }
     }
 
-    void DisplayLine(IDialogueNode node)
+    private void DisplayLine(IDialogueNode node)
     {
         StartCoroutine(RollOutLine(node.DialogueLine()));
-    }   
-
+    }
 
     IEnumerator RollOutLine(string line)
     {
@@ -203,7 +201,7 @@ public class DialogueUIDisplay : MonoBehaviour
             {
                 audioSource.clip = npcNode.lineSoundEffect;
                 audioSource.Play();
-            }        
+            }
             npcNode?.attachedEvent?.Raise();
         }
 
@@ -222,11 +220,11 @@ public class DialogueUIDisplay : MonoBehaviour
             dialogueLine.text += character;
             yield return null;
         }
-   
+
         if (currentNode.GetConnectedPlayerResponses().Count > 0)
         {
             // Display player responses
-            ShowReplies(currentNode.GetConnectedPlayerResponses());            
+            ShowReplies(currentNode.GetConnectedPlayerResponses());
         }
         else if (currentNode.GetConnectedNPCLines().Count > 0)
         {
@@ -238,7 +236,6 @@ public class DialogueUIDisplay : MonoBehaviour
         }
     }
 
-
     void ShowReplies(List<int> replyIDs)
     {
         if (!responsePrefab)
@@ -248,7 +245,7 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         for (int i = 0; i < replyIDs.Count; i++)
-        {        
+        {
             PlayerDialogueNode playerResponseNode = activeConversation.GetPlayerNodeByID(replyIDs[i]);
 
             if (playerResponseNode.outgoingTransitions.Count == 0)
@@ -273,7 +270,7 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         AnimateRepliesIn();
-    }   
+    }
 
     void SpawnButton(string buttonTitle, Action buttonAction)
     {
@@ -287,7 +284,7 @@ public class DialogueUIDisplay : MonoBehaviour
 
     void SpawnDoneButton()
     {
-        SpawnButton("Done", () => 
+        SpawnButton("Done", () =>
         {
             Close();
             onCurrentConvoCompleted?.Invoke();
@@ -299,8 +296,8 @@ public class DialogueUIDisplay : MonoBehaviour
     void ShowContinueButton(bool enabled)
     {
         if (enabled)
-        {   
-            LeanTween.alphaCanvas(continueButtonCG, 1, 0.23f).setOnComplete(() => 
+        {
+            LeanTween.alphaCanvas(continueButtonCG, 1, 0.23f).setOnComplete(() =>
             {
                 continueButtonCG.blocksRaycasts = enabled;
                 continueButtonCG.interactable = enabled;
@@ -308,18 +305,16 @@ public class DialogueUIDisplay : MonoBehaviour
         }
         else
         {
-            LeanTween.alphaCanvas(continueButtonCG, 0, 0.18f).setOnComplete(() => 
+            LeanTween.alphaCanvas(continueButtonCG, 0, 0.18f).setOnComplete(() =>
             {
                 continueButtonCG.blocksRaycasts = enabled;
                 continueButtonCG.interactable = enabled;
             });
         }
-       
+
     }
 
-
-#endregion
-
+    #endregion
 
     void DestroyAllReplyNodes()
     {

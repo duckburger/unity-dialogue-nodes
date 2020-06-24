@@ -4,7 +4,7 @@ using UnityEngine;
 using System;
 
 [Serializable]
-[CreateAssetMenu(menuName = "Knight Stuff/Scriptable Event")]
+[CreateAssetMenu(menuName = "Dialogue Events/Scriptable Event")]
 public class ScriptableEvent : ScriptableObject
 {
     List<ScriptableEventListener> listeners = new List<ScriptableEventListener>();
