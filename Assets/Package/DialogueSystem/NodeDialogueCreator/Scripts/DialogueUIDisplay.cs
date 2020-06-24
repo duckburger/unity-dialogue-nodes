@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
@@ -8,22 +9,33 @@ using UnityEngine.UI;
 
 public class DialogueUIDisplay : MonoBehaviour
 {
-    [SerializeField] ScriptableEvent onDialogueStarted;
-    [SerializeField] ScriptableEvent onDialogueEnded;
+    [SerializeField]
+    ScriptableEvent onDialogueStarted;
+    [SerializeField]
+    ScriptableEvent onDialogueEnded;
     [Space(10)]
-    [SerializeField] ConversationAsset activeConversation;
+    [SerializeField]
+    ConversationAsset activeConversation;
     [Space(10)]
     [Header("UI Components")]
-    [SerializeField] RectTransform mainDialogueBox;
-    [SerializeField] TextMeshProUGUI speakerName;
-    [SerializeField] TextMeshProUGUI dialogueLine;
-    [SerializeField] Image speakerIcon;
-    [SerializeField] Transform repliesParent;
-    [SerializeField] CanvasGroup continueButtonCG;
-    [SerializeField] GameObject skipButton;
+    [SerializeField]
+    RectTransform mainDialogueBox;
+    [SerializeField]
+    TextMeshProUGUI speakerName;
+    [SerializeField]
+    TextMeshProUGUI dialogueLine;
+    [SerializeField]
+    Image speakerIcon;
+    [SerializeField]
+    Transform repliesParent;
+    [SerializeField]
+    CanvasGroup continueButtonCG;
+    [SerializeField]
+    GameObject skipButton;
 
     [Space(10)]
-    [SerializeField] GameObject responsePrefab;
+    [SerializeField]
+    GameObject responsePrefab;
     IDialogueNode currentNode;
     Vector2 originalBoxPosition;
     Vector2 originalRepliesPosition;
@@ -33,20 +45,15 @@ public class DialogueUIDisplay : MonoBehaviour
 
     bool onScreen = false;
 
-    #region Awake / Start
 
     private void Awake()
     {
         originalBoxPosition = mainDialogueBox.localPosition;
         originalRepliesPosition = repliesParent.localPosition;
-        AnimateOut();
+        _ = AnimateOutAsync();
         mainCG = GetComponent<CanvasGroup>();
         audioSource = GetComponent<AudioSource>();
     }
-
-    #endregion
-
-    #region Animate In / Out
 
     public void AnimateIn()
     {
@@ -70,8 +77,9 @@ public class DialogueUIDisplay : MonoBehaviour
             });
     }
 
-    public void AnimateOut()
+    public async Task AnimateOutAsync()
     {
+        var tcs = new TaskCompletionSource<bool>();
         if (!mainDialogueBox)
         {
             Debug.LogError($"No main dialogue box connected");
@@ -93,7 +101,9 @@ public class DialogueUIDisplay : MonoBehaviour
                     mainCG.blocksRaycasts = false;
                     mainCG.interactable = false;
                 }
+                tcs.TrySetResult(true);
             });
+            await tcs.Task;
     }
 
     void AnimateRepliesIn()
@@ -122,10 +132,6 @@ public class DialogueUIDisplay : MonoBehaviour
             });
     }
 
-    #endregion
-
-    #region Accepting Object From an Event
-
     public void AcceptConversationAssetFromEvent(object convoAsset)
     {
         ConversationAsset asset = (ConversationAsset)convoAsset;
@@ -136,10 +142,6 @@ public class DialogueUIDisplay : MonoBehaviour
             Debug.Log("Cannot load a new conversation, while the previous one is still on screen");
     }
 
-    #endregion
-
-    #region Processing Conversation Asset
-
     public void AssignActiveConversation(ConversationAsset asset)
     {
         activeConversation = asset;
@@ -147,12 +149,12 @@ public class DialogueUIDisplay : MonoBehaviour
 
     public void ProcessActiveConversation()
     {
-        onDialogueStarted?.Raise();
-        ProcessActiveConversation(null);
+        _ = ProcessActiveConversation(null);
     }
 
-    public void ProcessActiveConversation(Action onConversationCompleted = null)
+    public async Task ProcessActiveConversation(Action onConversationCompleted = null)
     {
+        onDialogueStarted?.Raise();
         if (!activeConversation)
         {
             Debug.LogError($"No active conversation detected, can't play dialogue");
@@ -166,14 +168,25 @@ public class DialogueUIDisplay : MonoBehaviour
         }
 
         if (activeConversation.skippable)
+        {
             skipButton.SetActive(true);
+        }
         else
+        {
             skipButton.SetActive(false);
+        }
 
         onCurrentConvoCompleted = onConversationCompleted;
 
         if (!onScreen)
+        {
             AnimateIn();
+        }
+        else
+        {
+            await CloseAsync();
+            AnimateIn();
+        }
 
         for (int i = 0; i < activeConversation.allNPCNodes.Count; i++)
         {
@@ -252,7 +265,7 @@ public class DialogueUIDisplay : MonoBehaviour
             {
                 SpawnButton(playerResponseNode.dialogueLine, () =>
                 {
-                    Close();
+                    _ = CloseAsync();
                     onCurrentConvoCompleted?.Invoke();
                 });
                 continue;
@@ -286,7 +299,7 @@ public class DialogueUIDisplay : MonoBehaviour
     {
         SpawnButton("Done", () =>
         {
-            Close();
+            _ = CloseAsync();
             onCurrentConvoCompleted?.Invoke();
         });
 
@@ -314,9 +327,7 @@ public class DialogueUIDisplay : MonoBehaviour
 
     }
 
-    #endregion
-
-    void DestroyAllReplyNodes()
+    private void DestroyAllReplyNodes()
     {
         for (int i = repliesParent.childCount - 1; i >= 0; i--)
         {
@@ -324,9 +335,9 @@ public class DialogueUIDisplay : MonoBehaviour
         }
     }
 
-    public void Close()
+    public async Task CloseAsync()
     {
-        AnimateOut();
+        await AnimateOutAsync();
         DestroyAllReplyNodes();
         onCurrentConvoCompleted?.Invoke();
         onDialogueEnded?.Raise();
