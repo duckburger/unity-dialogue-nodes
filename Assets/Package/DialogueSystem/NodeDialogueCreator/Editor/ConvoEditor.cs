@@ -1,48 +1,50 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEditor;
 using UnityEngine;
-using UnityEditor;
 
-[CustomEditor(typeof(ConversationAsset))]
-public class ConvoEditor : Editor
+namespace DuckburgerDev.DialogueNodes
 {
-    ConversationAsset targetObj;
-
-    private void OnEnable() 
+    [CustomEditor(typeof(ConversationAsset))]
+    public class ConvoEditor : Editor
     {
-        targetObj = target as ConversationAsset;    
-    }
-    
-    public override void OnInspectorGUI()
-    {    
-        DrawDefaultInspector();
-      
-        EditorGUI.BeginChangeCheck();
+        ConversationAsset targetObj;
 
-        if (GUILayout.Button("Edit Converstion", GUILayout.Height(50f)))
+        private void OnEnable()
         {
-            if (DialogueEditorWindow.WindowInstance == null)
-            {
-                ShowMyEditWindow();
-            }
-            else
-            {
-                Debug.Log($"Destroying current window instance");
-                Destroy(DialogueEditorWindow.WindowInstance);
-                ShowMyEditWindow();
-            }
-        }        
+            targetObj = target as ConversationAsset;
+        }
 
-        EditorGUI.EndChangeCheck();
-        
-        serializedObject.Update();
-        EditorUtility.SetDirty(target);
+        public override void OnInspectorGUI()
+        {
+            DrawDefaultInspector();
+
+            EditorGUI.BeginChangeCheck();
+
+            if (GUILayout.Button("Edit Converstion", GUILayout.Height(50f)))
+            {
+                if (DialogueEditorWindow.WindowInstance == null)
+                {
+                    ShowMyEditWindow();
+                }
+                else
+                {
+                    Debug.Log($"Destroying current window instance");
+                    Destroy(DialogueEditorWindow.WindowInstance);
+                    ShowMyEditWindow();
+                }
+            }
+
+            EditorGUI.EndChangeCheck();
+
+            serializedObject.Update();
+            EditorUtility.SetDirty(target);
+        }
+
+
+        void ShowMyEditWindow()
+        {
+            DialogueEditorWindow.ShowWindow(targetObj);
+            AssetDatabase.Refresh();
+        }
     }
 
-
-    void ShowMyEditWindow()
-    {
-        DialogueEditorWindow.ShowWindow(targetObj);
-        AssetDatabase.Refresh();
-    }
 }

@@ -1,50 +1,54 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-[System.Serializable]
-[CreateAssetMenu(fileName = "ConversationAsset", menuName = "Dialogue Editor/Conversation Asset")]
-public class ConversationAsset : ScriptableObject
+namespace DuckburgerDev.DialogueNodes
 {
-    public List<NPCDialogueNode> allNPCNodes = new List<NPCDialogueNode>();
-    public List<PlayerDialogueNode> allPlayerNodes = new List<PlayerDialogueNode>();
-    public List<DialogueTransition> allTransitions = new List<DialogueTransition>();
-    public bool skippable = false;
-
-    public NPCDialogueNode GetNPCNodyByID(int id)
+    [System.Serializable]
+    [CreateAssetMenu(fileName = "ConversationAsset", menuName = "Dialogue Editor/Conversation Asset")]
+    public class ConversationAsset : ScriptableObject
     {
-        for (int i = 0; i < allNPCNodes.Count; i++)
+        public List<NPCDialogueNode> allNPCNodes = new List<NPCDialogueNode>();
+        public List<PlayerDialogueNode> allPlayerNodes = new List<PlayerDialogueNode>();
+        public List<DialogueTransition> allTransitions = new List<DialogueTransition>();
+        public bool skippable = false;
+
+        public NPCDialogueNode GetNPCNodyByID(int id)
         {
-            if (allNPCNodes[i].id == id)
+            for (int i = 0; i < allNPCNodes.Count; i++)
             {
-                return allNPCNodes[i];
+                if (allNPCNodes[i].id == id)
+                {
+                    return allNPCNodes[i];
+                }
             }
+            return null;
         }
-        return null;
+
+        public PlayerDialogueNode GetPlayerNodeByID(int id)
+        {
+            for (int i = 0; i < allPlayerNodes.Count; i++)
+            {
+                if (allPlayerNodes[i].id == id)
+                {
+                    return allPlayerNodes[i];
+                }
+            }
+            return null;
+        }
+
+        public DialogueTransition GetTransitionByID(int id)
+        {
+            for (int i = 0; i < allTransitions.Count; i++)
+            {
+                if (allTransitions[i].id == id)
+                {
+                    return allTransitions[i];
+                }
+            }
+            return null;
+        }
+
     }
 
-    public PlayerDialogueNode GetPlayerNodeByID(int id)
-    {
-        for (int i = 0; i < allPlayerNodes.Count; i++)
-        {
-            if (allPlayerNodes[i].id == id)
-            {
-                return allPlayerNodes[i];
-            }
-        }
-        return null;
-    }
-
-    public DialogueTransition GetTransitionByID(int id)
-    {
-        for (int i = 0; i < allTransitions.Count; i++)
-        {
-            if (allTransitions[i].id == id)
-            {
-                return allTransitions[i];
-            }
-        }
-        return null;
-    }
-    
 }
+

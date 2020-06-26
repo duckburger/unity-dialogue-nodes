@@ -1,21 +1,24 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class NPCDialogueHolder : MonoBehaviour
+namespace DuckburgerDev.DialogueNodes
 {
-    public bool canTalk = true;
-    public ConversationAsset myDialogue;
-    [SerializeField] ScriptableEvent onDialogueActivated;
 
-    public void ActivateDialogue()
+    public class NPCDialogueHolder : MonoBehaviour
     {
-        if (!myDialogue)
-        {
-            Debug.LogError($"{gameObject.name} is trying to activate dialoguem but doesn't have a dialogue asset");
-            return;
-        }
+        public bool canTalk = true;
+        public ConversationAsset myDialogue;
+        [SerializeField] ScriptableEvent onDialogueActivated;
 
-        onDialogueActivated?.RaiseWithData(myDialogue);
+        public void ActivateDialogue()
+        {
+            if (!myDialogue)
+            {
+                Debug.LogError($"{gameObject.name} is trying to activate dialoguem but doesn't have a dialogue asset");
+                return;
+            }
+
+            onDialogueActivated?.RaiseWithData(myDialogue);
+        }
     }
 }
+

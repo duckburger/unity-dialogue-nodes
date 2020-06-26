@@ -1,19 +1,23 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.Events;
-public class DialogueEventListener : MonoBehaviour
+
+namespace DuckburgerDev.DialogueNodes
 {
-    [SerializeField] DialogueNodeEvent eventToListenFor;
-    public UnityEvent onRaised;
-
-    private void OnEnable() 
+    public class DialogueEventListener : MonoBehaviour
     {
-        eventToListenFor?.RegisterListener(this); 
-    }
+        [SerializeField] DialogueNodeEvent eventToListenFor;
+        public UnityEvent onRaised;
 
-    private void OnDisable()   
-    {
-        eventToListenFor?.RemoveListener(this);    
+        private void OnEnable()
+        {
+            eventToListenFor?.RegisterListener(this);
+        }
+
+        private void OnDisable()
+        {
+            eventToListenFor?.RemoveListener(this);
+        }
     }
 }
+
+

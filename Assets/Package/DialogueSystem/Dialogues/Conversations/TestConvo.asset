@@ -17,8 +17,8 @@ MonoBehaviour:
     id: 833078304
     windowRect:
       serializedVersion: 2
-      x: 139
-      y: 241
+      x: -311
+      y: 263
       width: 200
       height: 375
     windowTitle: NPC Dialogue Node
@@ -32,12 +32,12 @@ MonoBehaviour:
     id: 1581424714
     windowRect:
       serializedVersion: 2
-      x: 725
-      y: 2
+      x: 275
+      y: 24
       width: 200
       height: 350
     windowTitle: NPC Dialogue Node
-    outgoingTransitions: 
+    outgoingTransitions: 7e650847
     incomingTransitions: af00ca51
     dialogueLine: Yes, it is pretty amusing.
     lineSoundEffect: {fileID: 0}
@@ -47,14 +47,32 @@ MonoBehaviour:
     id: 387285277
     windowRect:
       serializedVersion: 2
-      x: 724
-      y: 372
+      x: 274
+      y: 394
+      width: 200
+      height: 350
+    windowTitle: NPC Dialogue Node
+    outgoingTransitions: d5c3ba0b
+    incomingTransitions: 5d385813
+    dialogueLine: Well, you clearly aren't very impressed. But that's ok.
+    lineSoundEffect: {fileID: 0}
+    attachedEvent: {fileID: 0}
+    speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+  - containingConversation: {fileID: 11400000}
+    id: 452280209
+    windowRect:
+      serializedVersion: 2
+      x: 686
+      y: 94
       width: 200
       height: 350
     windowTitle: NPC Dialogue Node
     outgoingTransitions: 
-    incomingTransitions: 5d385813
-    dialogueLine: Well, you clearly aren't very impressed. But that's ok.
+    incomingTransitions: 7e650847d5c3ba0b
+    dialogueLine: And this one is just a massive wall of text to see how the window
+      handles longer text inputs. Say if this was a massive dialogue, how would it
+      show up in the ui? That is pretty much the purpose of this placeholder novel
+      I am writing here.
     lineSoundEffect: {fileID: 0}
     attachedEvent: {fileID: 0}
     speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
@@ -63,8 +81,8 @@ MonoBehaviour:
     id: 1937793768
     windowRect:
       serializedVersion: 2
-      x: 419
-      y: 139
+      x: -31
+      y: 161
       width: 200
       height: 128
     windowTitle: Player Response Node
@@ -75,8 +93,8 @@ MonoBehaviour:
     id: 2120176327
     windowRect:
       serializedVersion: 2
-      x: 437
-      y: 398
+      x: -13
+      y: 420
       width: 200
       height: 128
     windowTitle: Player Response Node
@@ -107,12 +125,12 @@ MonoBehaviour:
       id: 1581424714
       windowRect:
         serializedVersion: 2
-        x: 725
-        y: 2
+        x: 275
+        y: 24
         width: 200
         height: 350
       windowTitle: NPC Dialogue Node
-      outgoingTransitions: 
+      outgoingTransitions: 7e650847
       incomingTransitions: af00ca51
       dialogueLine: Yes, it is pretty amusing.
       lineSoundEffect: {fileID: 0}
@@ -123,8 +141,8 @@ MonoBehaviour:
       id: 1937793768
       windowRect:
         serializedVersion: 2
-        x: 419
-        y: 139
+        x: -31
+        y: 161
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -151,8 +169,8 @@ MonoBehaviour:
       id: 833078304
       windowRect:
         serializedVersion: 2
-        x: 139
-        y: 241
+        x: -311
+        y: 263
         width: 200
         height: 375
       windowTitle: NPC Dialogue Node
@@ -196,8 +214,8 @@ MonoBehaviour:
       id: 1937793768
       windowRect:
         serializedVersion: 2
-        x: 419
-        y: 139
+        x: -31
+        y: 161
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -211,8 +229,8 @@ MonoBehaviour:
       id: 833078304
       windowRect:
         serializedVersion: 2
-        x: 139
-        y: 241
+        x: -311
+        y: 263
         width: 200
         height: 375
       windowTitle: NPC Dialogue Node
@@ -256,8 +274,8 @@ MonoBehaviour:
       id: 2120176327
       windowRect:
         serializedVersion: 2
-        x: 437
-        y: 398
+        x: -13
+        y: 420
         width: 200
         height: 128
       windowTitle: Player Response Node
@@ -287,12 +305,12 @@ MonoBehaviour:
       id: 387285277
       windowRect:
         serializedVersion: 2
-        x: 724
-        y: 372
+        x: 274
+        y: 394
         width: 200
         height: 350
       windowTitle: NPC Dialogue Node
-      outgoingTransitions: 
+      outgoingTransitions: d5c3ba0b
       incomingTransitions: 5d385813
       dialogueLine: Well, you clearly aren't very impressed. But that's ok.
       lineSoundEffect: {fileID: 0}
@@ -303,14 +321,140 @@ MonoBehaviour:
       id: 2120176327
       windowRect:
         serializedVersion: 2
-        x: 437
-        y: 398
+        x: -13
+        y: 420
         width: 200
         height: 128
       windowTitle: Player Response Node
       outgoingTransitions: 5d385813
       incomingTransitions: f6a93919
       dialogueLine: Whatever...
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  - id: 1191732606
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 1581424714
+      windowRect:
+        serializedVersion: 2
+        x: 275
+        y: 24
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 7e650847
+      incomingTransitions: af00ca51
+      dialogueLine: Yes, it is pretty amusing.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 452280209
+      windowRect:
+        serializedVersion: 2
+        x: 686
+        y: 94
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: 7e650847d5c3ba0b
+      dialogueLine: And this one is just a massive wall of text to see how the window
+        handles longer text inputs. Say if this was a massive dialogue, how would
+        it show up in the ui? That is pretty much the purpose of this placeholder
+        novel I am writing here.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+    endPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
+  - id: 196789205
+    containingConversation: {fileID: 11400000}
+    startNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 387285277
+      windowRect:
+        serializedVersion: 2
+        x: 274
+        y: 394
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: d5c3ba0b
+      incomingTransitions: 5d385813
+      dialogueLine: Well, you clearly aren't very impressed. But that's ok.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    endNPCNode:
+      containingConversation: {fileID: 11400000}
+      id: 452280209
+      windowRect:
+        serializedVersion: 2
+        x: 686
+        y: 94
+        width: 200
+        height: 350
+      windowTitle: NPC Dialogue Node
+      outgoingTransitions: 
+      incomingTransitions: 7e650847d5c3ba0b
+      dialogueLine: And this one is just a massive wall of text to see how the window
+        handles longer text inputs. Say if this was a massive dialogue, how would
+        it show up in the ui? That is pretty much the purpose of this placeholder
+        novel I am writing here.
+      lineSoundEffect: {fileID: 0}
+      attachedEvent: {fileID: 0}
+      speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    startPlayerNode:
+      containingConversation: {fileID: 0}
+      id: 0
+      windowRect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 0
+        height: 0
+      windowTitle: 
+      outgoingTransitions: 
+      incomingTransitions: 
+      dialogueLine: 
     endPlayerNode:
       containingConversation: {fileID: 0}
       id: 0

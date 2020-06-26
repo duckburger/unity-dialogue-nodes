@@ -1,32 +1,36 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogueNodeEvent : ScriptableObject
+namespace DuckburgerDev.DialogueNodes
 {
-    List<DialogueEventListener> listeners = new List<DialogueEventListener>();
-
-    public void Raise()
+    public class DialogueNodeEvent : ScriptableObject
     {
-        for (int i = 0; i < listeners.Count; i++)
+        List<DialogueEventListener> listeners = new List<DialogueEventListener>();
+
+        public void Raise()
         {
-            listeners[i].onRaised?.Invoke();
+            for (int i = 0; i < listeners.Count; i++)
+            {
+                listeners[i].onRaised?.Invoke();
+            }
+        }
+
+        public void RegisterListener(DialogueEventListener listener)
+        {
+            if (!listeners.Contains(listener))
+            {
+                listeners.Add(listener);
+            }
+        }
+
+        public void RemoveListener(DialogueEventListener listener)
+        {
+            if (listeners.Contains(listener))
+            {
+                listeners.Remove(listener);
+            }
         }
     }
 
-    public void RegisterListener(DialogueEventListener listener)
-    {
-        if (!listeners.Contains(listener))
-        {
-            listeners.Add(listener);
-        }
-    }
-
-    public void RemoveListener(DialogueEventListener listener)
-    {
-        if (listeners.Contains(listener))
-        {
-            listeners.Remove(listener);
-        }
-    }
 }
+
