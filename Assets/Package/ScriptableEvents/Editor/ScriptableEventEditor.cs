@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
+#if UNITY_EDITOR
+    
 [CustomEditor(typeof(ScriptableEvent))]
 public class ScriptableEventEditor : Editor
 {
@@ -51,3 +53,6 @@ public class ScriptableEventEditor : Editor
         eventListenersInScene = FindObjectsOfType<ScriptableEventListener>();
     }
 }
+
+
+#endif

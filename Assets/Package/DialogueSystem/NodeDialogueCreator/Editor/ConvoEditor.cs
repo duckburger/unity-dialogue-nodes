@@ -1,6 +1,8 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
+#if UNITY_EDITOR
+
 namespace DuckburgerDev.DialogueNodes
 {
     [CustomEditor(typeof(ConversationAsset))]
@@ -48,3 +50,5 @@ namespace DuckburgerDev.DialogueNodes
     }
 
 }
+
+#endif

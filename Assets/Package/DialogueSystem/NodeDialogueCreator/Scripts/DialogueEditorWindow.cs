@@ -105,7 +105,10 @@ namespace DuckburgerDev.DialogueNodes
             DrawTransitions();
             DrawNodes(currentEvent);
 
-            EditorUtility.SetDirty(currentAsset);
+            if (currentAsset != null)
+            {
+                EditorUtility.SetDirty(currentAsset);
+            }
             if (GUI.changed) { Repaint(); }
 
         }
