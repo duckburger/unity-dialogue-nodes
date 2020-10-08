@@ -1,0 +1,102 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff965f00d1cf3f94ba90268b7c492f1f, type: 3}
+  m_Name: test-conversation
+  m_EditorClassIdentifier: 
+  allNPCNodes:
+  - id: 0
+  - id: 1
+  allPlayerNodes:
+  - id: 2
+  - id: 3
+  allTransitions:
+  - id: 4
+  - id: 5
+  - id: 6
+  skippable: 0
+  references:
+    version: 1
+    00000000:
+      type: {class: NPCDialogueNode, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        _outgoingTransitions:
+        - id: 4
+        _incomingTransitions: []
+        _connectedPlayerResponses: []
+        _connectedNPCLines: []
+        lineSoundEffect: {fileID: 0}
+        attachedEvent: {fileID: 0}
+        speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    00000001:
+      type: {class: NPCDialogueNode, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        _outgoingTransitions:
+        - id: 5
+        - id: 6
+        _incomingTransitions:
+        - id: 4
+        _connectedPlayerResponses: []
+        _connectedNPCLines: []
+        lineSoundEffect: {fileID: 0}
+        attachedEvent: {fileID: 0}
+        speaker: {fileID: 11400000, guid: 798972b0ee2139544937ff572d6bd917, type: 2}
+    00000002:
+      type: {class: PlayerDialogueNode, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        _outgoingTransitions: []
+        _incomingTransitions:
+        - id: 5
+        _connectedPlayerResponses: []
+        _connectedNPCLines: []
+    00000003:
+      type: {class: PlayerDialogueNode, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        _outgoingTransitions: []
+        _incomingTransitions:
+        - id: 6
+        _connectedPlayerResponses: []
+        _connectedNPCLines: []
+    00000004:
+      type: {class: DialogueTransition, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        StartNPCNode:
+          id: 0
+        StartPlayerNode:
+          id: 7
+        EndPlayerNode:
+          id: 7
+        EndNPCNode:
+          id: 1
+    00000005:
+      type: {class: DialogueTransition, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        StartNPCNode:
+          id: 1
+        StartPlayerNode:
+          id: 7
+        EndPlayerNode:
+          id: 2
+        EndNPCNode:
+          id: 7
+    00000006:
+      type: {class: DialogueTransition, ns: DuckburgerDev.DialogueNodes, asm: DuckDialogue}
+      data:
+        StartNPCNode:
+          id: 1
+        StartPlayerNode:
+          id: 7
+        EndPlayerNode:
+          id: 3
+        EndNPCNode:
+          id: 7
+    00000007:
+      type: {class: , ns: , asm: }

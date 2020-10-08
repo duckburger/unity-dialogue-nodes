@@ -10,20 +10,25 @@ namespace DuckburgerDev.DialogueNodes
     public class DialogueEditorWindow : EditorWindow
     {
         public static DialogueEditorWindow WindowInstance;
-        public List<IDialogueNode> allNodes = new List<IDialogueNode>();
+        [SerializeReference]
+        public List<DialogueNode> allNodes = new List<DialogueNode>();
+        [SerializeReference]
         public List<NPCDialogueNode> allNPCNodes = new List<NPCDialogueNode>();
+        [SerializeReference]
         public List<PlayerDialogueNode> allPlayerNodes = new List<PlayerDialogueNode>();
+        [SerializeReference]
         public List<DialogueTransition> allTransitions = new List<DialogueTransition>();
         public ConversationAsset currentAsset;
-        Vector3 mousePos;
-        Vector2 dragDelta;
-        Vector2 gridOffset;
-        bool makingTransition;
-        bool clickedOnNode;
-        IDialogueNode selectedNode;
-        DialogueTransition selectedTransition;
+        
+        private Vector3 mousePos;
+        private Vector2 dragDelta;
+        private Vector2 gridOffset;
+        private bool makingTransition;
+        private bool clickedOnNode;
+        private DialogueNode selectedNode;
+        private DialogueTransition selectedTransition;
 
-        public enum UserInteractions
+        private enum UserInteractions
         {
             addNPCDialogueNode,
             addPlayerResponseNode,
@@ -144,7 +149,7 @@ namespace DuckburgerDev.DialogueNodes
 
             for (int i = 0; i < allNodes.Count; i++)
             {
-                allNodes[i].SetWindowRect(GUI.Window(i, allNodes[i].WindowRect(), DrawNodeRect, allNodes[i].WindowTitle()));
+                allNodes[i].SetWindowRect(GUI.Window(i, allNodes[i].WindowRect, DrawNodeRect, allNodes[i].WindowTitle));
             }
 
             EndWindows();
@@ -202,7 +207,7 @@ namespace DuckburgerDev.DialogueNodes
             clickedOnNode = false;
             for (int i = 0; i < allNodes.Count; i++)
             {
-                if (allNodes[i].WindowRect().Contains(currentEvent.mousePosition))
+                if (allNodes[i].WindowRect.Contains(currentEvent.mousePosition))
                 {
                     clickedOnNode = true;
                     selectedNode = allNodes[i];
@@ -230,7 +235,7 @@ namespace DuckburgerDev.DialogueNodes
             clickedOnNode = false;
             for (int i = 0; i < allNodes.Count; i++)
             {
-                if (allNodes[i].WindowRect().Contains(currentEvent.mousePosition))
+                if (allNodes[i].WindowRect.Contains(currentEvent.mousePosition))
                 {
                     clickedOnNode = true;
                     selectedNode = allNodes[i];
@@ -243,7 +248,7 @@ namespace DuckburgerDev.DialogueNodes
             }
 
 
-            if (!clickedOnNode || selectedNode.OutgoingTransitions().Contains(selectedTransition.id))
+            if (!clickedOnNode || selectedNode.HasOutgoingTransition(selectedTransition))
             {
                 // Delete the pending transition
                 DeleteTransition(selectedTransition);
@@ -252,13 +257,13 @@ namespace DuckburgerDev.DialogueNodes
             {
                 if (selectedNode is NPCDialogueNode)
                 {
-                    selectedTransition.endNPCNode = selectedNode as NPCDialogueNode;
+                    selectedTransition.EndNPCNode = selectedNode as NPCDialogueNode;
                 }
                 else
                 {
-                    selectedTransition.endPlayerNode = selectedNode as PlayerDialogueNode;
+                    selectedTransition.EndPlayerNode = selectedNode as PlayerDialogueNode;
                 }
-                selectedNode.IncomingTransitions().Add(selectedTransition.id);
+                selectedNode.AddIncomingTransition(selectedTransition);
             }
             makingTransition = false;
             selectedNode = null;
@@ -295,33 +300,33 @@ namespace DuckburgerDev.DialogueNodes
             {
                 case UserInteractions.addNPCDialogueNode:
 
-                    NPCDialogueNode newNPCNode = new NPCDialogueNode(new Rect(mousePos.x, mousePos.y, 200, 300), "NPC Dialogue Node", currentAsset);
+                    NPCDialogueNode newNPCNode = new NPCDialogueNode(new Rect(mousePos.x, mousePos.y, 200, 300), "NPC Dialogue Node");
                     allNPCNodes.Add(newNPCNode);
                     allNodes.Add(newNPCNode);
                     break;
 
                 case UserInteractions.addPlayerResponseNode:
 
-                    PlayerDialogueNode newPlayerNode = new PlayerDialogueNode(new Rect(mousePos.x, mousePos.y, 200, 128), "Player Response Node", currentAsset);
+                    PlayerDialogueNode newPlayerNode = new PlayerDialogueNode(new Rect(mousePos.x, mousePos.y, 200, 128), "Player Response Node");
                     allPlayerNodes.Add(newPlayerNode);
                     allNodes.Add(newPlayerNode);
                     break;
 
                 case UserInteractions.duplicateNode:
 
-                    Rect newPosRect = new Rect(selectedNode.WindowRect().x + selectedNode.WindowRect().width, selectedNode.WindowRect().y, selectedNode.WindowRect().width, selectedNode.WindowRect().height);
+                    Rect newPosRect = new Rect(selectedNode.WindowRect.x + selectedNode.WindowRect.width, selectedNode.WindowRect.y, selectedNode.WindowRect.width, selectedNode.WindowRect.height);
                     if (selectedNode is PlayerDialogueNode)
                     {
-                        PlayerDialogueNode duplicatedNode = new PlayerDialogueNode(newPosRect, selectedNode.WindowTitle(), currentAsset);
-                        duplicatedNode.dialogueLine = selectedNode.DialogueLine();
+                        PlayerDialogueNode duplicatedNode = new PlayerDialogueNode(newPosRect, selectedNode.WindowTitle);
+                        duplicatedNode.SetDialogueLine(selectedNode.DialogueLine);
                         allPlayerNodes.Add(duplicatedNode);
                         allNodes.Add(duplicatedNode);
                     }
                     else if (selectedNode is NPCDialogueNode)
                     {
                         NPCDialogueNode dialNode = selectedNode as NPCDialogueNode;
-                        NPCDialogueNode duplicatedNode = new NPCDialogueNode(newPosRect, selectedNode.WindowTitle(), currentAsset);
-                        duplicatedNode.dialogueLine = selectedNode.DialogueLine();
+                        NPCDialogueNode duplicatedNode = new NPCDialogueNode(newPosRect, selectedNode.WindowTitle);
+                        duplicatedNode.SetDialogueLine(selectedNode.DialogueLine);
                         duplicatedNode.speaker = dialNode.speaker;
                         allNPCNodes.Add(duplicatedNode);
                         allNodes.Add(duplicatedNode);
@@ -352,14 +357,14 @@ namespace DuckburgerDev.DialogueNodes
                         NPCDialogueNode npcNode = selectedNode as NPCDialogueNode;
                         newTransition = new DialogueTransition();
                         newTransition.Initialize(npcNode, null, null, null, currentAsset);
-                        npcNode.outgoingTransitions.Add(newTransition.id);
+                        npcNode.AddOutgoingTransition(newTransition);
                     }
                     else if (selectedNode is PlayerDialogueNode)
                     {
                         PlayerDialogueNode playerNode = selectedNode as PlayerDialogueNode;
                         newTransition = new DialogueTransition();
                         newTransition.Initialize(null, playerNode, null, null, currentAsset);
-                        playerNode.outgoingTransitions.Add(newTransition.id);
+                        playerNode.AddOutgoingTransition(newTransition);
                     }
                     else
                     {
@@ -397,24 +402,24 @@ namespace DuckburgerDev.DialogueNodes
         {
             allTransitions.Remove(transitionToDelete);
 
-            if (transitionToDelete.startNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.startNPCNode.windowTitle))
+            if (transitionToDelete.StartNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.StartNPCNode.WindowTitle))
             {
-                transitionToDelete.startNPCNode.outgoingTransitions.Remove(transitionToDelete.id);
+                transitionToDelete.StartNPCNode.OutgoingTransitions.Remove(transitionToDelete);
             }
 
-            if (transitionToDelete.startPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.startPlayerNode.windowTitle))
+            if (transitionToDelete.StartPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.StartPlayerNode.WindowTitle))
             {
-                transitionToDelete.startPlayerNode.outgoingTransitions.Remove(transitionToDelete.id);
+                transitionToDelete.StartPlayerNode.OutgoingTransitions.Remove(transitionToDelete);
             }
 
-            if (transitionToDelete.endNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.endNPCNode.windowTitle))
+            if (transitionToDelete.EndNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.EndNPCNode.WindowTitle))
             {
-                transitionToDelete.endNPCNode.incomingTransitions.Remove(transitionToDelete.id);
+                transitionToDelete.EndNPCNode.IncomingTransitions.Remove(transitionToDelete);
             }
 
-            if (transitionToDelete.endPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.endPlayerNode.windowTitle))
+            if (transitionToDelete.EndPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.EndPlayerNode.WindowTitle))
             {
-                transitionToDelete.endPlayerNode.incomingTransitions.Remove(transitionToDelete.id);
+                transitionToDelete.EndPlayerNode.IncomingTransitions.Remove(transitionToDelete);
             }
         }
 
@@ -422,7 +427,7 @@ namespace DuckburgerDev.DialogueNodes
         {
             for (int i = 0; i < allNodes.Count; i++)
             {
-                if (allNodes[i].WindowRect().Contains(currentEvent.mousePosition))
+                if (allNodes[i].WindowRect.Contains(currentEvent.mousePosition))
                 {
                     return true;
                 }

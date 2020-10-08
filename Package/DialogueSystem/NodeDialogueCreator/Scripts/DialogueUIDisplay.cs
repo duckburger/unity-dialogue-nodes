@@ -143,10 +143,10 @@ namespace DuckburgerDev.DialogueNodes
 
         public void ProcessActiveConversation()
         {
-            _ = ProcessActiveConversation(null);
+            ProcessActiveConversation(null);
         }
 
-        public async Task ProcessActiveConversation(Action onConversationCompleted = null)
+        public void ProcessActiveConversation(Action onConversationCompleted = null)
         {
             onDialogueStarted?.Raise();
             if (!activeConversation)
@@ -184,10 +184,10 @@ namespace DuckburgerDev.DialogueNodes
 
             for (int i = 0; i < activeConversation.allNPCNodes.Count; i++)
             {
-                if (activeConversation.allNPCNodes[i].incomingTransitions.Count <= 0 && activeConversation.allNPCNodes[i].outgoingTransitions.Count > 0)
+                if (activeConversation.allNPCNodes[i].IncomingTransitions.Count <= 0 && activeConversation.allNPCNodes[i].OutgoingTransitions.Count > 0)
                 {
                     // Found a node with only outbound transitions - this will be our first node
-                    currentNode = activeConversation.GetNPCNodyByID(activeConversation.allNPCNodes[i].id);
+                    currentNode = activeConversation.allNPCNodes[i];
                     DisplayLine(currentNode);
                 }
             }
@@ -195,7 +195,7 @@ namespace DuckburgerDev.DialogueNodes
 
         private void DisplayLine(DialogueNode node)
         {
-            StartCoroutine(RollOutLine(node._dialogueLine()));
+            StartCoroutine(RollOutLine(node.DialogueLine));
         }
 
         IEnumerator RollOutLine(string line)
@@ -228,12 +228,12 @@ namespace DuckburgerDev.DialogueNodes
                 yield return null;
             }
 
-            if (currentNode._connectedPlayerResponses().Count > 0)
+            if (currentNode.PlayerResponses.Count > 0)
             {
                 // Display player responses
-                ShowReplies(currentNode._connectedPlayerResponses());
+                ShowReplies(currentNode.PlayerResponses);
             }
-            else if (currentNode._connectedNPCLines().Count > 0)
+            else if (currentNode.NpcResponses.Count > 0)
             {
                 ShowContinueButton(true);
             }
@@ -243,7 +243,7 @@ namespace DuckburgerDev.DialogueNodes
             }
         }
 
-        void ShowReplies(List<int> replyIDs)
+        void ShowReplies(List<DialogueNode> availableReplies)
         {
             if (!responsePrefab)
             {
@@ -251,13 +251,11 @@ namespace DuckburgerDev.DialogueNodes
                 return;
             }
 
-            for (int i = 0; i < replyIDs.Count; i++)
+            foreach (var playerResponseNode in availableReplies)
             {
-                PlayerDialogueNode playerResponseNode = activeConversation.GetPlayerNodeByID(replyIDs[i]);
-
-                if (playerResponseNode.outgoingTransitions.Count == 0)
+                if (playerResponseNode.OutgoingTransitions.Count == 0)
                 {
-                    SpawnButton(playerResponseNode.dialogueLine, () =>
+                    SpawnButton(playerResponseNode.DialogueLine, () =>
                     {
                         Close();
                         onCurrentConvoCompleted?.Invoke();
@@ -265,15 +263,14 @@ namespace DuckburgerDev.DialogueNodes
                     continue;
                 }
 
-                NPCDialogueNode connectedNPCNode = activeConversation.GetNPCNodyByID(activeConversation.GetTransitionByID(playerResponseNode.outgoingTransitions[0]).endNPCNode.id);
-                SpawnButton(playerResponseNode.dialogueLine, () =>
+                NPCDialogueNode connectedNPCNode = playerResponseNode.OutgoingTransitions[0].EndNPCNode;
+                SpawnButton(playerResponseNode.DialogueLine, () =>
                 {
                     AnimateRepliesOut();
                     DialogueNode savedNode = connectedNPCNode;
                     currentNode = savedNode;
                     DisplayLine(currentNode);
                 });
-
             }
 
             AnimateRepliesIn();
@@ -336,7 +333,7 @@ namespace DuckburgerDev.DialogueNodes
         public void Continue()
         {
             // Display NPC responses
-            currentNode = activeConversation.GetNPCNodyByID(currentNode._connectedNPCLines()[0]);
+            currentNode = currentNode.NpcResponses[0];
             DisplayLine(currentNode);
             ShowContinueButton(false);
         }

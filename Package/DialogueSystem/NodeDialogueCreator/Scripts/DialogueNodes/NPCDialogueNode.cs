@@ -6,17 +6,9 @@ using UnityEngine;
 
 namespace DuckburgerDev.DialogueNodes
 {
-    [System.Serializable]
-    public class NPCDialogueNode : IDialogueNode, ISerializationCallbackReceiver
+    [Serializable]
+    public class NPCDialogueNode : DialogueNode
     {
-        [SerializeField] ConversationAsset containingConversation;
-        public int id;
-        public Rect windowRect;
-        public string windowTitle;
-        public List<int> outgoingTransitions = new List<int>();
-        public List<int> incomingTransitions = new List<int>();
-        [TextArea(3, 10)]
-        public string dialogueLine;
         public AudioClip lineSoundEffect;
         public DialogueNodeEvent attachedEvent;
 
@@ -28,27 +20,17 @@ namespace DuckburgerDev.DialogueNodes
         string fullPathToAsset;
 
         #endregion
-
-#if UNITY_EDITOR
-
-        public NPCDialogueNode(Rect rect, string title, ConversationAsset convo)
-        {
-            this.windowRect = rect;
-            this.windowTitle = title;
-            this.containingConversation = convo;
-            this.pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
-            id = UnityEngine.Random.Range(1, Int32.MaxValue);
-            while (containingConversation.GetNPCNodyByID(id) != null)
-                id = UnityEngine.Random.Range(1, Int32.MaxValue);
-        }
-
-#endif
-
+        
         public DialogueCharacter speaker;
 
 #if UNITY_EDITOR
 
-        public void DrawWindow()
+        public NPCDialogueNode(Rect rect, string title) : base(rect, title)
+        {
+            
+        }
+
+        public override void DrawWindow()
         {
             speaker = (DialogueCharacter)EditorGUILayout.ObjectField(speaker, typeof(DialogueCharacter), false);
             windowHeight = 350f;
@@ -69,31 +51,33 @@ namespace DuckburgerDev.DialogueNodes
                 GUILayout.EndVertical();
                 EditorGUILayout.LabelField("Dialogue Line");
                 EditorStyles.textField.wordWrap = true;
-                dialogueLine = EditorGUILayout.TextArea(dialogueLine, GUILayout.Height(88f));
+                DialogueLine = EditorGUILayout.TextArea(DialogueLine, GUILayout.Height(88f));
                 lineSoundEffect = (AudioClip)EditorGUILayout.ObjectField(lineSoundEffect, typeof(AudioClip), false);
 
                 EditorGUI.BeginChangeCheck();
 
                 if (!attachedEvent)
                 {
+                    // TODO: Figure events out
                     if (GUILayout.Button("+ Event"))
                     {
-                        if (string.IsNullOrEmpty(pathToConvoAsset))
-                        {
-                            pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
-                        }
-                        DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
-                        string directoryName = $"{containingConversation.name}_events";
-                        string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);
-                        fullPathToAsset = $"{pathToFolder}\\{containingConversation.name}_Events";
-                        if (!Directory.Exists(fullPathToAsset))
-                        {
-                            Directory.CreateDirectory(fullPathToAsset);
-                        }
-                        AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{containingConversation.allNPCNodes.IndexOf(this)}.asset");
-                        AssetDatabase.SaveAssets();
-                        AssetDatabase.Refresh();
-                        attachedEvent = newEvent;
+                        // if (string.IsNullOrEmpty(pathToConvoAsset))
+                        // {
+                        //     pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
+                        // }
+                        // DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
+                        // string directoryName = $"{containingConversation.name}_events";
+                        // string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);
+                        // fullPathToAsset = $"{pathToFolder}\\{containingConversation.name}_Events";
+                        // if (!Directory.Exists(fullPathToAsset))
+                        // {
+                        //     Directory.CreateDirectory(fullPathToAsset);
+                        // }
+                        // AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{containingConversation.allNPCNodes.IndexOf(this)}.asset");
+                        // AssetDatabase.SaveAssets();
+                        // AssetDatabase.Refresh();
+                        // attachedEvent = newEvent;
+                        throw new NotImplementedException();
                     }
                 }
                 else
@@ -115,104 +99,26 @@ namespace DuckburgerDev.DialogueNodes
 
                 EditorGUI.EndChangeCheck();
 
-                windowRect.height = windowHeight;
+                Rect updatedRect = new Rect(WindowRect);
+                updatedRect.height = windowHeight;
+                SetWindowRect(updatedRect);
             }
         }
-
+        
 #endif
         public void Drag(Vector2 dragDelta)
         {
-            windowRect.position += dragDelta;
+            Vector2 rectPosition = WindowRect.position;
+            rectPosition += dragDelta;
+            WindowRect.Set(rectPosition.x, rectPosition.y, WindowRect.width, WindowRect.height);
         }
 
         #region Interface Requirements
-
-        public List<int> OutgoingTransitions()
+        
+        public override void SetWindowRect(Rect rect)
         {
-            return outgoingTransitions;
+            WindowRect = rect;
         }
-
-        public List<int> IncomingTransitions()
-        {
-            return incomingTransitions;
-        }
-
-        public Rect WindowRect()
-        {
-            return windowRect;
-        }
-
-        public string WindowTitle()
-        {
-            return windowTitle;
-        }
-
-        public string DialogueLine()
-        {
-            return dialogueLine;
-        }
-
-        public List<int> GetConnectedPlayerResponses()
-        {
-            List<int> responses = new List<int>();
-            for (int i = 0; i < outgoingTransitions.Count; i++)
-            {
-                if (containingConversation.GetTransitionByID(outgoingTransitions[i]).endPlayerNode.id > 0)
-                    responses.Add(containingConversation.GetTransitionByID(outgoingTransitions[i]).endPlayerNode.id);
-            }
-            return responses;
-        }
-
-        public List<int> GetConnectedNPCLines()
-        {
-            List<int> npcLineNodes = new List<int>();
-            for (int i = 0; i < outgoingTransitions.Count; i++)
-            {
-                if (containingConversation.GetTransitionByID(outgoingTransitions[i]).endNPCNode.id > 0)
-                    npcLineNodes.Add(containingConversation.GetTransitionByID(outgoingTransitions[i]).endNPCNode.id);
-            }
-            return npcLineNodes;
-        }
-
-        public void DeleteAllTransitions()
-        {
-            outgoingTransitions.Clear();
-            incomingTransitions.Clear();
-        }
-
-        public void SetWindowRect(Rect rect)
-        {
-            this.windowRect = rect;
-        }
-
-        public void OnBeforeSerialize()
-        {
-            if (containingConversation != null)
-            {
-                NPCDialogueNode myNode = containingConversation.GetNPCNodyByID(id);
-                if (myNode != null)
-                {
-                    this.windowRect = myNode.windowRect;
-                    this.windowTitle = myNode.windowTitle;
-                    this.dialogueLine = myNode.dialogueLine;
-                }
-            }
-        }
-
-        public void OnAfterDeserialize()
-        {
-            if (containingConversation != null)
-            {
-                NPCDialogueNode myNode = containingConversation.GetNPCNodyByID(id);
-                if (myNode != null)
-                {
-                    this.windowRect = myNode.windowRect;
-                    this.windowTitle = myNode.windowTitle;
-                    this.dialogueLine = myNode.dialogueLine;
-                }
-            }
-        }
-
         #endregion
     }
 

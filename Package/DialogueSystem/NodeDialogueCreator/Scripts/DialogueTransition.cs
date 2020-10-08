@@ -5,85 +5,82 @@ using UnityEngine;
 namespace DuckburgerDev.DialogueNodes
 {
     [Serializable]
-    public class DialogueTransition : ISerializationCallbackReceiver
+    public class DialogueTransition
     {
-        public int id;
-        [SerializeField] ConversationAsset containingConversation;
-        public NPCDialogueNode startNPCNode;
-        public NPCDialogueNode endNPCNode;
-        public PlayerDialogueNode startPlayerNode;
-        public PlayerDialogueNode endPlayerNode;
+        [SerializeReference]
+        public NPCDialogueNode StartNPCNode;
+        [SerializeReference]
+        public PlayerDialogueNode StartPlayerNode;
+        [SerializeReference]
+        public PlayerDialogueNode EndPlayerNode;
+        [SerializeReference]
+        public NPCDialogueNode EndNPCNode;
 
+        
         public void Initialize(NPCDialogueNode fromNPCNode, PlayerDialogueNode fromPlayerNode, NPCDialogueNode toNPCNode, PlayerDialogueNode toPlayerNode, ConversationAsset convo)
         {
             Debug.Log($"Assigning new variables to transition");
             if (fromNPCNode != null)
             {
-                startNPCNode = fromNPCNode;
-                startPlayerNode = null;
+                StartNPCNode = fromNPCNode;
+                StartPlayerNode = null;
             }
             else if (fromPlayerNode != null)
             {
-                startPlayerNode = fromPlayerNode;
-                startNPCNode = null;
+                StartPlayerNode = fromPlayerNode;
+                StartNPCNode = null;
             }
 
             if (toNPCNode != null)
             {
-                endNPCNode = toNPCNode;
-                endPlayerNode = null;
+                EndNPCNode = toNPCNode;
+                EndPlayerNode = null;
             }
             else if (toPlayerNode != null)
             {
-                endPlayerNode = toPlayerNode;
-                endNPCNode = null;
+                EndPlayerNode = toPlayerNode;
+                EndNPCNode = null;
             }
-
-            containingConversation = convo;
-
-            id = UnityEngine.Random.Range(1, Int32.MaxValue);
-            while (containingConversation.GetTransitionByID(id) != null)
-                id = UnityEngine.Random.Range(0, Int32.MaxValue);
         }
 #if UNITY_EDITOR
         public void Draw()
         {
             Vector3 startPos = Vector3.zero;
-            if (startNPCNode != null && !string.IsNullOrEmpty(startNPCNode.windowTitle))
+            if (StartNPCNode != null && !string.IsNullOrEmpty(StartNPCNode.WindowTitle))
             {
                 startPos = new Vector3
                 (
-                    startNPCNode.windowRect.x + startNPCNode.windowRect.width,
-                    startNPCNode.windowRect.y + (startNPCNode.windowRect.height * 0.5f),
+                    StartNPCNode.WindowRect.x + StartNPCNode.WindowRect.width,
+                    StartNPCNode.WindowRect.y + (StartNPCNode.WindowRect.height * 0.5f),
                     0
                 );
             }
-            else if (startPlayerNode != null && !string.IsNullOrEmpty(startPlayerNode.windowTitle))
+            else if (StartPlayerNode != null && !string.IsNullOrEmpty(StartPlayerNode.WindowTitle))
             {
                 startPos = new Vector3
                 (
-                    startPlayerNode.windowRect.x + startPlayerNode.windowRect.width,
-                    startPlayerNode.windowRect.y + (startPlayerNode.windowRect.height * 0.5f),
+                    StartPlayerNode.WindowRect.x + StartPlayerNode.WindowRect.width,
+                    StartPlayerNode.WindowRect.y + (StartPlayerNode.WindowRect.height * 0.5f),
                     0
                 );
             }
 
             Vector3 endPos;
-            if (endNPCNode != null && !string.IsNullOrEmpty(endNPCNode.windowTitle))
+            if (EndNPCNode != null && !string.IsNullOrEmpty(EndNPCNode.WindowTitle))
             {
                 endPos = new Vector3
                 (
-                    endNPCNode.windowRect.x,
-                    endNPCNode.windowRect.y + (endNPCNode.windowRect.height * 0.5f),
+                    EndNPCNode.WindowRect.x,
+                    EndNPCNode.WindowRect.y + (EndNPCNode.WindowRect.height * 0.5f),
                     0
                 );
             }
-            else if (endPlayerNode != null && !string.IsNullOrEmpty(endPlayerNode.windowTitle))
+            else if (EndPlayerNode != null && !string.IsNullOrEmpty(EndPlayerNode.WindowTitle))
             {
                 endPos = new Vector3
                 (
-                    endPlayerNode.windowRect.x,
-                    endPlayerNode.windowRect.y + (endPlayerNode.windowRect.height * 0.5f),
+                    EndPlayerNode.WindowRect.x,
+                    EndPlayerNode.WindowRect.y + (EndPlayerNode.WindowRect.height * 0.5f),
                     0
                 );
             }
@@ -121,46 +118,6 @@ namespace DuckburgerDev.DialogueNodes
         }
 
 #endif
-
-        public void OnBeforeSerialize()
-        {
-            if (startNPCNode != null && startNPCNode.id > 0)
-            {
-                startNPCNode = containingConversation.GetNPCNodyByID(startNPCNode.id);
-            }
-            if (startPlayerNode != null && startPlayerNode.id > 0)
-            {
-                startPlayerNode = containingConversation.GetPlayerNodeByID(startPlayerNode.id);
-            }
-            if (endNPCNode != null && endNPCNode.id > 0)
-            {
-                endNPCNode = containingConversation.GetNPCNodyByID(endNPCNode.id);
-            }
-            if (endPlayerNode != null && endPlayerNode.id > 0)
-            {
-                endPlayerNode = containingConversation.GetPlayerNodeByID(endPlayerNode.id);
-            }
-        }
-
-        public void OnAfterDeserialize()
-        {
-            if (startNPCNode != null && startNPCNode.id > 0)
-            {
-                startNPCNode = containingConversation.GetNPCNodyByID(startNPCNode.id);
-            }
-            if (startPlayerNode != null && startPlayerNode.id > 0)
-            {
-                startPlayerNode = containingConversation.GetPlayerNodeByID(startPlayerNode.id);
-            }
-            if (endNPCNode != null && endNPCNode.id > 0)
-            {
-                endNPCNode = containingConversation.GetNPCNodyByID(endNPCNode.id);
-            }
-            if (endPlayerNode != null && endPlayerNode.id > 0)
-            {
-                endPlayerNode = containingConversation.GetPlayerNodeByID(endPlayerNode.id);
-            }
-        }
     }
 }
 

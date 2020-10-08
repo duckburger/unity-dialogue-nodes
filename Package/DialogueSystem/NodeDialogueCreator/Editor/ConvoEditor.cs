@@ -17,38 +17,29 @@ namespace DuckburgerDev.DialogueNodes
 
         public override void OnInspectorGUI()
         {
-            DrawDefaultInspector();
-
             EditorGUI.BeginChangeCheck();
 
             if (GUILayout.Button("Edit Converstion", GUILayout.Height(50f)))
             {
-                if (DialogueEditorWindow.WindowInstance == null)
-                {
-                    ShowMyEditWindow();
-                }
-                else
+                if (DialogueEditorWindow.WindowInstance != null)
                 {
                     Debug.Log($"Destroying current window instance");
                     Destroy(DialogueEditorWindow.WindowInstance);
-                    ShowMyEditWindow();
                 }
+                ShowMyEditWindow();
             }
 
             EditorGUI.EndChangeCheck();
-
             serializedObject.Update();
             EditorUtility.SetDirty(target);
         }
-
-
+        
         void ShowMyEditWindow()
         {
             DialogueEditorWindow.ShowWindow(targetObj);
             AssetDatabase.Refresh();
         }
     }
-
 }
 
 #endif
