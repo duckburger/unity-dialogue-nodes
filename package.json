@@ -1,0 +1,11 @@
+{
+    "name": "com.duckburgerdev.dialoguenodes",
+    "version": "0.1.0",
+    "displayName": "[DuckburgerDev] Dialogue Nodes",
+    "description": "This is simple dialogue node editor for Unity",
+    "unity": "2019.1",
+    "unityRelease": "0b5",
+    "author": {
+      "name": "DuckburgerDev"
+    }
+}
