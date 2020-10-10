@@ -29,9 +29,9 @@ namespace DuckburgerDev.DialogueNodes
                 ShowMyEditWindow();
             }
 
-            EditorGUI.EndChangeCheck();
             serializedObject.Update();
             EditorUtility.SetDirty(target);
+            EditorGUI.EndChangeCheck();
         }
         
         void ShowMyEditWindow()

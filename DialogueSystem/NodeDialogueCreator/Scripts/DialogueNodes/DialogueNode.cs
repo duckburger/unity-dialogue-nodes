@@ -15,14 +15,21 @@ public abstract class DialogueNode
     protected List<DialogueNode> _connectedPlayerResponses = new List<DialogueNode>();
     [SerializeReference]
     protected List<DialogueNode> _connectedNPCLines = new List<DialogueNode>();
+
+    [SerializeField]
+    private string _dialogueLine;
+    [SerializeField]
+    private string _windowTitle;
+    [SerializeField]
+    private Rect _windowRect;
     
     public List<DialogueTransition> OutgoingTransitions => _outgoingTransitions;
     public List<DialogueTransition> IncomingTransitions => _incomingTransitions;
     public List<DialogueNode> PlayerResponses => _connectedPlayerResponses;
     public List<DialogueNode> NpcResponses => _connectedNPCLines;
-    public string DialogueLine { get; protected set; }
-    public string WindowTitle { get; protected set; }
-    public Rect WindowRect { get; protected set; }
+    public string DialogueLine { get => _dialogueLine; protected set => _dialogueLine = value; }
+    public string WindowTitle { get => _windowTitle; protected set => _windowTitle = value; }
+    public Rect WindowRect { get => _windowRect; protected set => _windowRect = value; }
 
 #if UNITY_EDITOR
     public abstract void DrawWindow();
@@ -63,5 +70,6 @@ public abstract class DialogueNode
         _incomingTransitions.Clear();
         _outgoingTransitions.Clear();
     }
-    
+
+    public abstract void Drag(Vector2 dragDelta);
 }

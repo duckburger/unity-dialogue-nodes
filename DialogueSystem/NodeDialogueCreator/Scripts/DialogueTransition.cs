@@ -8,79 +8,38 @@ namespace DuckburgerDev.DialogueNodes
     public class DialogueTransition
     {
         [SerializeReference]
-        public NPCDialogueNode StartNPCNode;
+        public DialogueNode StartNode;
         [SerializeReference]
-        public PlayerDialogueNode StartPlayerNode;
-        [SerializeReference]
-        public PlayerDialogueNode EndPlayerNode;
-        [SerializeReference]
-        public NPCDialogueNode EndNPCNode;
+        public DialogueNode EndNode;
 
         
-        public void Initialize(NPCDialogueNode fromNPCNode, PlayerDialogueNode fromPlayerNode, NPCDialogueNode toNPCNode, PlayerDialogueNode toPlayerNode, ConversationAsset convo)
+        public void Initialize(DialogueNode fromNode, DialogueNode toNode)
         {
             Debug.Log($"Assigning new variables to transition");
-            if (fromNPCNode != null)
-            {
-                StartNPCNode = fromNPCNode;
-                StartPlayerNode = null;
-            }
-            else if (fromPlayerNode != null)
-            {
-                StartPlayerNode = fromPlayerNode;
-                StartNPCNode = null;
-            }
-
-            if (toNPCNode != null)
-            {
-                EndNPCNode = toNPCNode;
-                EndPlayerNode = null;
-            }
-            else if (toPlayerNode != null)
-            {
-                EndPlayerNode = toPlayerNode;
-                EndNPCNode = null;
-            }
+            StartNode = fromNode;
+            EndNode = toNode;
         }
 #if UNITY_EDITOR
         public void Draw()
         {
             Vector3 startPos = Vector3.zero;
-            if (StartNPCNode != null && !string.IsNullOrEmpty(StartNPCNode.WindowTitle))
+            if (StartNode != null && !string.IsNullOrEmpty(StartNode.WindowTitle))
             {
                 startPos = new Vector3
                 (
-                    StartNPCNode.WindowRect.x + StartNPCNode.WindowRect.width,
-                    StartNPCNode.WindowRect.y + (StartNPCNode.WindowRect.height * 0.5f),
-                    0
-                );
-            }
-            else if (StartPlayerNode != null && !string.IsNullOrEmpty(StartPlayerNode.WindowTitle))
-            {
-                startPos = new Vector3
-                (
-                    StartPlayerNode.WindowRect.x + StartPlayerNode.WindowRect.width,
-                    StartPlayerNode.WindowRect.y + (StartPlayerNode.WindowRect.height * 0.5f),
+                    StartNode.WindowRect.x + StartNode.WindowRect.width,
+                    StartNode.WindowRect.y + (StartNode.WindowRect.height * 0.5f),
                     0
                 );
             }
 
             Vector3 endPos;
-            if (EndNPCNode != null && !string.IsNullOrEmpty(EndNPCNode.WindowTitle))
+            if (EndNode != null && !string.IsNullOrEmpty(EndNode.WindowTitle))
             {
                 endPos = new Vector3
                 (
-                    EndNPCNode.WindowRect.x,
-                    EndNPCNode.WindowRect.y + (EndNPCNode.WindowRect.height * 0.5f),
-                    0
-                );
-            }
-            else if (EndPlayerNode != null && !string.IsNullOrEmpty(EndPlayerNode.WindowTitle))
-            {
-                endPos = new Vector3
-                (
-                    EndPlayerNode.WindowRect.x,
-                    EndPlayerNode.WindowRect.y + (EndPlayerNode.WindowRect.height * 0.5f),
+                    EndNode.WindowRect.x,
+                    EndNode.WindowRect.y + (EndNode.WindowRect.height * 0.5f),
                     0
                 );
             }

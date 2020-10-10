@@ -23,7 +23,7 @@ namespace DuckburgerDev.DialogueNodes
 
 #endif
 
-        public void Drag(Vector2 dragDelta)
+        public override void Drag(Vector2 dragDelta)
         {
             Rect newRect = WindowRect;
             newRect.position += dragDelta;

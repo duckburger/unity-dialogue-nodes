@@ -13,10 +13,10 @@ namespace DuckburgerDev.DialogueNodes
         [SerializeReference]
         public List<DialogueNode> allNodes = new List<DialogueNode>();
         [SerializeReference]
-        public List<NPCDialogueNode> allNPCNodes = new List<NPCDialogueNode>();
+        public List<DialogueNode> allNPCNodes = new List<DialogueNode>();
         [SerializeReference]
-        public List<PlayerDialogueNode> allPlayerNodes = new List<PlayerDialogueNode>();
-        [SerializeReference]
+        public List<DialogueNode> allPlayerNodes = new List<DialogueNode>();
+        [SerializeField]
         public List<DialogueTransition> allTransitions = new List<DialogueTransition>();
         public ConversationAsset currentAsset;
         
@@ -36,32 +36,7 @@ namespace DuckburgerDev.DialogueNodes
             deleteNode,
             makeTransition
         }
-
-        private void OnDisable()
-        {
-            if (WindowInstance.currentAsset != null)
-            {
-                WindowInstance.currentAsset.allNPCNodes = allNPCNodes.ToList();
-                WindowInstance.currentAsset.allPlayerNodes = allPlayerNodes.ToList();
-                WindowInstance.currentAsset.allTransitions = allTransitions.ToList();
-
-                EditorUtility.SetDirty(WindowInstance.currentAsset);
-            }
-            WindowInstance.currentAsset = null;
-
-            WindowInstance.allTransitions.Clear();
-            WindowInstance.allNPCNodes.Clear();
-            WindowInstance.allPlayerNodes.Clear();
-            WindowInstance.allNodes.Clear();
-            WindowInstance.selectedNode = null;
-            WindowInstance.selectedTransition = null;
-            WindowInstance.makingTransition = false;
-            EditorUtility.SetDirty(WindowInstance);
-            WindowInstance = null;
-            AssetDatabase.Refresh();
-        }
-
-
+        
         [MenuItem("Dialogue Editor/Editor")]
         public static void ShowWindow()
         {
@@ -74,7 +49,7 @@ namespace DuckburgerDev.DialogueNodes
         {
             Debug.Log($"Called ShowWindowWIthAsset");
             WindowInstance = null;
-            WindowInstance = EditorWindow.GetWindow<DialogueEditorWindow>();
+            WindowInstance = GetWindow<DialogueEditorWindow>();
             WindowInstance.minSize = new Vector2(800f, 600f);
 
             WindowInstance.allNodes.Clear();
@@ -85,9 +60,9 @@ namespace DuckburgerDev.DialogueNodes
             WindowInstance.allNodes.AddRange(assetToEdit.allNPCNodes);
             WindowInstance.allNodes.AddRange(assetToEdit.allPlayerNodes);
 
-            WindowInstance.allNPCNodes = assetToEdit.allNPCNodes.ToList();
-            WindowInstance.allPlayerNodes = assetToEdit.allPlayerNodes.ToList();
-            WindowInstance.allTransitions = assetToEdit.allTransitions.ToList();
+            WindowInstance.allNPCNodes = assetToEdit.allNPCNodes;
+            WindowInstance.allPlayerNodes = assetToEdit.allPlayerNodes;
+            WindowInstance.allTransitions = assetToEdit.allTransitions;
 
             WindowInstance.currentAsset = assetToEdit;
             WindowInstance.selectedNode = null;
@@ -97,7 +72,31 @@ namespace DuckburgerDev.DialogueNodes
             EditorUtility.SetDirty(WindowInstance);
             AssetDatabase.Refresh();
         }
+        
+        private void OnDisable()
+        {
+            if (WindowInstance.currentAsset != null)
+            {
+                WindowInstance.currentAsset.allNPCNodes = allNPCNodes;
+                WindowInstance.currentAsset.allPlayerNodes = allPlayerNodes;
+                WindowInstance.currentAsset.allTransitions = allTransitions;
+                EditorUtility.SetDirty(WindowInstance.currentAsset);
+                AssetDatabase.Refresh();
+            }
+            WindowInstance.currentAsset = null;
 
+            // WindowInstance.allTransitions.Clear();
+            // WindowInstance.allNPCNodes.Clear();
+            // WindowInstance.allPlayerNodes.Clear();
+            // WindowInstance.allNodes.Clear();
+            WindowInstance.selectedNode = null;
+            WindowInstance.selectedTransition = null;
+            WindowInstance.makingTransition = false;
+            EditorUtility.SetDirty(WindowInstance);
+            WindowInstance = null;
+            AssetDatabase.Refresh();
+        }
+        
         private void OnGUI()
         {
             Event currentEvent = Event.current;
@@ -257,11 +256,11 @@ namespace DuckburgerDev.DialogueNodes
             {
                 if (selectedNode is NPCDialogueNode)
                 {
-                    selectedTransition.EndNPCNode = selectedNode as NPCDialogueNode;
+                    selectedTransition.EndNode = selectedNode as NPCDialogueNode;
                 }
                 else
                 {
-                    selectedTransition.EndPlayerNode = selectedNode as PlayerDialogueNode;
+                    selectedTransition.EndNode = selectedNode as PlayerDialogueNode;
                 }
                 selectedNode.AddIncomingTransition(selectedTransition);
             }
@@ -356,14 +355,14 @@ namespace DuckburgerDev.DialogueNodes
                     {
                         NPCDialogueNode npcNode = selectedNode as NPCDialogueNode;
                         newTransition = new DialogueTransition();
-                        newTransition.Initialize(npcNode, null, null, null, currentAsset);
+                        newTransition.Initialize(npcNode, null);
                         npcNode.AddOutgoingTransition(newTransition);
                     }
                     else if (selectedNode is PlayerDialogueNode)
                     {
                         PlayerDialogueNode playerNode = selectedNode as PlayerDialogueNode;
                         newTransition = new DialogueTransition();
-                        newTransition.Initialize(null, playerNode, null, null, currentAsset);
+                        newTransition.Initialize(playerNode, null);
                         playerNode.AddOutgoingTransition(newTransition);
                     }
                     else
@@ -402,24 +401,14 @@ namespace DuckburgerDev.DialogueNodes
         {
             allTransitions.Remove(transitionToDelete);
 
-            if (transitionToDelete.StartNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.StartNPCNode.WindowTitle))
+            if (transitionToDelete.StartNode != null && !string.IsNullOrEmpty(transitionToDelete.StartNode.WindowTitle))
             {
-                transitionToDelete.StartNPCNode.OutgoingTransitions.Remove(transitionToDelete);
+                transitionToDelete.StartNode.OutgoingTransitions.Remove(transitionToDelete);
             }
 
-            if (transitionToDelete.StartPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.StartPlayerNode.WindowTitle))
+            if (transitionToDelete.EndNode != null && !string.IsNullOrEmpty(transitionToDelete.EndNode.WindowTitle))
             {
-                transitionToDelete.StartPlayerNode.OutgoingTransitions.Remove(transitionToDelete);
-            }
-
-            if (transitionToDelete.EndNPCNode != null && !string.IsNullOrEmpty(transitionToDelete.EndNPCNode.WindowTitle))
-            {
-                transitionToDelete.EndNPCNode.IncomingTransitions.Remove(transitionToDelete);
-            }
-
-            if (transitionToDelete.EndPlayerNode != null && !string.IsNullOrEmpty(transitionToDelete.EndPlayerNode.WindowTitle))
-            {
-                transitionToDelete.EndPlayerNode.IncomingTransitions.Remove(transitionToDelete);
+                transitionToDelete.EndNode.IncomingTransitions.Remove(transitionToDelete);
             }
         }
 

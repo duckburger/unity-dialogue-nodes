@@ -263,11 +263,11 @@ namespace DuckburgerDev.DialogueNodes
                     continue;
                 }
 
-                NPCDialogueNode connectedNPCNode = playerResponseNode.OutgoingTransitions[0].EndNPCNode;
+                NPCDialogueNode connectedNpcNode = playerResponseNode.OutgoingTransitions[0].EndNode as NPCDialogueNode;
                 SpawnButton(playerResponseNode.DialogueLine, () =>
                 {
                     AnimateRepliesOut();
-                    DialogueNode savedNode = connectedNPCNode;
+                    DialogueNode savedNode = connectedNpcNode;
                     currentNode = savedNode;
                     DisplayLine(currentNode);
                 });
