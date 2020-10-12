@@ -30,6 +30,12 @@ namespace DuckburgerDev.DialogueNodes
             
         }
 
+        public override void AddIncomingTransition(DialogueTransition transitionToAdd)
+        {
+            base.AddIncomingTransition(transitionToAdd);
+            transitionToAdd.StartNode.NpcResponses.Add(this);
+        }
+
         public override void DrawWindow()
         {
             speaker = (DialogueCharacter)EditorGUILayout.ObjectField(speaker, typeof(DialogueCharacter), false);
@@ -108,9 +114,9 @@ namespace DuckburgerDev.DialogueNodes
 #endif
         public override void Drag(Vector2 dragDelta)
         {
-            Vector2 rectPosition = WindowRect.position;
-            rectPosition += dragDelta;
-            WindowRect.Set(rectPosition.x, rectPosition.y, WindowRect.width, WindowRect.height);
+            Rect newRect = WindowRect;
+            newRect.position += dragDelta;
+            WindowRect = newRect;
         }
 
         #region Interface Requirements

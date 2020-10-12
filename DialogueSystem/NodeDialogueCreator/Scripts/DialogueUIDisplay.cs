@@ -10,135 +10,117 @@ namespace DuckburgerDev.DialogueNodes
 {
     public class DialogueUIDisplay : MonoBehaviour
     {
-        [SerializeField]
-        ScriptableEvent onDialogueStarted;
-        [SerializeField]
-        ScriptableEvent onDialogueEnded;
         [Space(10)]
         [SerializeField]
-        ConversationAsset activeConversation;
+        private ConversationAsset _currentConversationAsset;
         [Space(10)]
         [Header("UI Components")]
         [SerializeField]
-        RectTransform mainDialogueBox;
+        private RectTransform _mainDialogueBox;
         [SerializeField]
-        TextMeshProUGUI speakerName;
+        private TextMeshProUGUI _speakerName;
         [SerializeField]
-        TextMeshProUGUI dialogueLine;
+        private TextMeshProUGUI _dialogueLine;
         [SerializeField]
-        Image speakerIcon;
+        private Image _speakerIcon;
         [SerializeField]
-        Transform repliesParent;
+        private Transform _repliesParent;
         [SerializeField]
-        CanvasGroup continueButtonCG;
+        private CanvasGroup _continueButtonCg;
         [SerializeField]
-        GameObject skipButton;
+        private GameObject _skipButton;
 
         [Space(10)]
         [SerializeField]
-        GameObject responsePrefab;
-        DialogueNode currentNode;
-        Vector2 originalBoxPosition;
-        Vector2 originalRepliesPosition;
-        Action onCurrentConvoCompleted = null;
-        CanvasGroup mainCG;
-        AudioSource audioSource;
-
-        bool onScreen = false;
-
+        private GameObject _replyPrefab;
+        private DialogueNode _currentNode;
+        private Vector2 _originalBoxPosition;
+        private Vector2 _originalRepliesPosition;
+        private Action _onCurrentConvoCompleted = null;
+        private CanvasGroup _mainCg;
+        private AudioSource _audioSource;
+        private bool _onScreen = false;
 
         private void Awake()
         {
-            originalBoxPosition = mainDialogueBox.localPosition;
-            originalRepliesPosition = repliesParent.localPosition;
+            _originalBoxPosition = _mainDialogueBox.localPosition;
+            _originalRepliesPosition = _repliesParent.localPosition;
             AnimateOut();
-            mainCG = GetComponent<CanvasGroup>();
-            audioSource = GetComponent<AudioSource>();
+            _mainCg = GetComponent<CanvasGroup>();
+            _audioSource = GetComponent<AudioSource>();
         }
 
         public void AnimateIn()
         {
-            if (!mainDialogueBox)
+            if (!_mainDialogueBox)
             {
                 Debug.LogError($"No main dialogue box connected");
                 return;
             }
 
-            onScreen = true;
-            if (mainCG)
+            _onScreen = true;
+            if (_mainCg)
             {
-                mainCG.alpha = 1;
-                mainCG.blocksRaycasts = true;
-                mainCG.interactable = true;
+                _mainCg.alpha = 1;
+                _mainCg.blocksRaycasts = true;
+                _mainCg.interactable = true;
             }
 
-            Vector2 anchorPos = mainDialogueBox.anchoredPosition;
+            Vector2 anchorPos = _mainDialogueBox.anchoredPosition;
             anchorPos.y = 0f;
-            mainDialogueBox.anchoredPosition = anchorPos;
+            _mainDialogueBox.anchoredPosition = anchorPos;
         }
 
         public void AnimateOut()
         {
-            var tcs = new TaskCompletionSource<bool>();
-            if (!mainDialogueBox)
+            if (!_mainDialogueBox)
             {
                 Debug.LogError($"No main dialogue box connected");
                 return;
             }
 
-            onScreen = false;
+            _onScreen = false;
 
-            Vector2 anchorPos = mainDialogueBox.anchoredPosition;
+            Vector2 anchorPos = _mainDialogueBox.anchoredPosition;
             anchorPos.y -= Screen.height / 2;
-            mainDialogueBox.anchoredPosition = anchorPos;
-            if (mainCG)
+            _mainDialogueBox.anchoredPosition = anchorPos;
+            if (_mainCg)
             {
-                mainCG.alpha = 0;
-                mainCG.blocksRaycasts = false;
-                mainCG.interactable = false;
+                _mainCg.alpha = 0;
+                _mainCg.blocksRaycasts = false;
+                _mainCg.interactable = false;
             }
-            tcs.TrySetResult(true);
         }
 
         void AnimateRepliesIn()
         {
-            if (!repliesParent)
+            if (!_repliesParent)
             {
                 Debug.LogError($"No replies parent connected");
                 return;
             }
 
-            Vector3 repliesLocalPosition = repliesParent.localPosition;
-            repliesLocalPosition.y = originalRepliesPosition.y;
-            repliesParent.localPosition = repliesLocalPosition;
+            Vector3 repliesLocalPosition = _repliesParent.localPosition;
+            repliesLocalPosition.y = _originalRepliesPosition.y;
+            _repliesParent.localPosition = repliesLocalPosition;
         }
 
         void AnimateRepliesOut()
         {
-            if (!repliesParent)
+            if (!_repliesParent)
             {
                 Debug.LogError($"No replies parent connected");
                 return;
             }
 
-            Vector3 repliesLocalPosition = repliesParent.localPosition;
+            Vector3 repliesLocalPosition = _repliesParent.localPosition;
             repliesLocalPosition.y -= Screen.height / 2f;
             DestroyAllReplyNodes();
         }
 
-        public void AcceptConversationAssetFromEvent(object convoAsset)
-        {
-            ConversationAsset asset = (ConversationAsset)convoAsset;
-            AssignActiveConversation(asset);
-            if (!onScreen)
-                ProcessActiveConversation();
-            else
-                Debug.Log("Cannot load a new conversation, while the previous one is still on screen");
-        }
-
         public void AssignActiveConversation(ConversationAsset asset)
         {
-            activeConversation = asset;
+            _currentConversationAsset = asset;
         }
 
         public void ProcessActiveConversation()
@@ -148,31 +130,33 @@ namespace DuckburgerDev.DialogueNodes
 
         public void ProcessActiveConversation(Action onConversationCompleted = null)
         {
-            onDialogueStarted?.Raise();
-            if (!activeConversation)
+            if (!_currentConversationAsset)
             {
                 Debug.LogError($"No active conversation detected, can't play dialogue");
                 return;
             }
 
-            if (activeConversation.allNPCNodes.Count <= 0)
+            if (_currentConversationAsset.allNPCNodes.Count <= 0)
             {
                 Debug.Log($"No nodes in the active conversation, can't play dialogue");
                 return;
             }
 
-            if (activeConversation.skippable)
+            if (_skipButton != null)
             {
-                skipButton.SetActive(true);
+                if (_currentConversationAsset.skippable)
+                {
+                    _skipButton.SetActive(true);
+                }
+                else
+                {
+                    _skipButton.SetActive(false);
+                }
             }
-            else
-            {
-                skipButton.SetActive(false);
-            }
+            
+            _onCurrentConvoCompleted = onConversationCompleted;
 
-            onCurrentConvoCompleted = onConversationCompleted;
-
-            if (!onScreen)
+            if (!_onScreen)
             {
                 AnimateIn();
             }
@@ -182,13 +166,13 @@ namespace DuckburgerDev.DialogueNodes
                 AnimateIn();
             }
 
-            for (int i = 0; i < activeConversation.allNPCNodes.Count; i++)
+            for (int i = 0; i < _currentConversationAsset.allNPCNodes.Count; i++)
             {
-                if (activeConversation.allNPCNodes[i].IncomingTransitions.Count <= 0 && activeConversation.allNPCNodes[i].OutgoingTransitions.Count > 0)
+                if (_currentConversationAsset.allNPCNodes[i].IncomingTransitions.Count <= 0 && _currentConversationAsset.allNPCNodes[i].OutgoingTransitions.Count > 0)
                 {
                     // Found a node with only outbound transitions - this will be our first node
-                    currentNode = activeConversation.allNPCNodes[i];
-                    DisplayLine(currentNode);
+                    _currentNode = _currentConversationAsset.allNPCNodes[i];
+                    DisplayLine(_currentNode);
                 }
             }
         }
@@ -200,40 +184,40 @@ namespace DuckburgerDev.DialogueNodes
 
         IEnumerator RollOutLine(string line)
         {
-            NPCDialogueNode npcNode = currentNode as NPCDialogueNode;
+            NPCDialogueNode npcNode = _currentNode as NPCDialogueNode;
 
             if (npcNode != null)
             {
-                if (audioSource && npcNode.lineSoundEffect)
+                if (_audioSource && npcNode.lineSoundEffect)
                 {
-                    audioSource.clip = npcNode.lineSoundEffect;
-                    audioSource.Play();
+                    _audioSource.clip = npcNode.lineSoundEffect;
+                    _audioSource.Play();
                 }
                 npcNode?.attachedEvent?.Raise();
             }
 
             if (npcNode != null)
             {
-                if (npcNode.speaker && npcNode.speaker.icon && !speakerIcon)
+                if (npcNode.speaker && npcNode.speaker.icon && !_speakerIcon)
                 {
                     Debug.LogError($"Connect speaker icon to the Dialogue UI Display");
                 }
-                speakerIcon.sprite = npcNode.speaker.icon;
-                speakerName.text = npcNode.speaker.name;
+                _speakerIcon.sprite = npcNode.speaker.icon;
+                _speakerName.text = npcNode.speaker.name;
             }
-            dialogueLine.text = "";
+            _dialogueLine.text = "";
             foreach (char character in line)
             {
-                dialogueLine.text += character;
+                _dialogueLine.text += character;
                 yield return null;
             }
 
-            if (currentNode.PlayerResponses.Count > 0)
+            if (_currentNode.PlayerResponses.Count > 0)
             {
                 // Display player responses
-                ShowReplies(currentNode.PlayerResponses);
+                ShowReplies(_currentNode.PlayerResponses);
             }
-            else if (currentNode.NpcResponses.Count > 0)
+            else if (_currentNode.NpcResponses.Count > 0)
             {
                 ShowContinueButton(true);
             }
@@ -245,7 +229,7 @@ namespace DuckburgerDev.DialogueNodes
 
         void ShowReplies(List<DialogueNode> availableReplies)
         {
-            if (!responsePrefab)
+            if (_replyPrefab == null)
             {
                 Debug.LogError($"No response prefab connected");
                 return;
@@ -258,7 +242,7 @@ namespace DuckburgerDev.DialogueNodes
                     SpawnButton(playerResponseNode.DialogueLine, () =>
                     {
                         Close();
-                        onCurrentConvoCompleted?.Invoke();
+                        _onCurrentConvoCompleted?.Invoke();
                     });
                     continue;
                 }
@@ -268,8 +252,8 @@ namespace DuckburgerDev.DialogueNodes
                 {
                     AnimateRepliesOut();
                     DialogueNode savedNode = connectedNpcNode;
-                    currentNode = savedNode;
-                    DisplayLine(currentNode);
+                    _currentNode = savedNode;
+                    DisplayLine(_currentNode);
                 });
             }
 
@@ -278,7 +262,7 @@ namespace DuckburgerDev.DialogueNodes
 
         void SpawnButton(string buttonTitle, Action buttonAction)
         {
-            GameObject spawnedReply = Instantiate(responsePrefab, Vector3.zero, Quaternion.identity, repliesParent);
+            GameObject spawnedReply = Instantiate(_replyPrefab, Vector3.zero, Quaternion.identity, _repliesParent);
             TextMeshProUGUI replyText = spawnedReply.GetComponentInChildren<TextMeshProUGUI>();
             Button replyButton = spawnedReply.GetComponent<Button>();
 
@@ -291,7 +275,7 @@ namespace DuckburgerDev.DialogueNodes
             SpawnButton("Done", () =>
             {
                 Close();
-                onCurrentConvoCompleted?.Invoke();
+                _onCurrentConvoCompleted?.Invoke();
             });
 
             AnimateRepliesIn();
@@ -301,24 +285,24 @@ namespace DuckburgerDev.DialogueNodes
         {
             if (enabled)
             {
-                continueButtonCG.blocksRaycasts = enabled;
-                continueButtonCG.interactable = enabled;
-                continueButtonCG.alpha = 1f;
+                _continueButtonCg.blocksRaycasts = enabled;
+                _continueButtonCg.interactable = enabled;
+                _continueButtonCg.alpha = 1f;
             }
             else
             {
-                continueButtonCG.blocksRaycasts = enabled;
-                continueButtonCG.interactable = enabled;
-                continueButtonCG.alpha = 0f;
+                _continueButtonCg.blocksRaycasts = enabled;
+                _continueButtonCg.interactable = enabled;
+                _continueButtonCg.alpha = 0f;
             }
 
         }
 
         private void DestroyAllReplyNodes()
         {
-            for (int i = repliesParent.childCount - 1; i >= 0; i--)
+            for (int i = _repliesParent.childCount - 1; i >= 0; i--)
             {
-                Destroy(repliesParent.GetChild(i).gameObject);
+                Destroy(_repliesParent.GetChild(i).gameObject);
             }
         }
 
@@ -326,15 +310,14 @@ namespace DuckburgerDev.DialogueNodes
         {
             AnimateOut();
             DestroyAllReplyNodes();
-            onCurrentConvoCompleted?.Invoke();
-            onDialogueEnded?.Raise();
+            _onCurrentConvoCompleted?.Invoke();
         }
 
         public void Continue()
         {
             // Display NPC responses
-            currentNode = currentNode.NpcResponses[0];
-            DisplayLine(currentNode);
+            _currentNode = _currentNode.NpcResponses[0];
+            DisplayLine(_currentNode);
             ShowContinueButton(false);
         }
 

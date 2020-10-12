@@ -14,7 +14,13 @@ namespace DuckburgerDev.DialogueNodes
         {
             
         }
-        
+
+        public override void AddIncomingTransition(DialogueTransition transitionToAdd)
+        {
+            base.AddIncomingTransition(transitionToAdd);
+            transitionToAdd.StartNode.PlayerResponses.Add(this);
+        }
+
         public override void DrawWindow()
         {
             EditorStyles.textField.wordWrap = true;

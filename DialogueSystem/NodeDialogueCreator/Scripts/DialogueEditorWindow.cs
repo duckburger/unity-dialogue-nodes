@@ -246,7 +246,6 @@ namespace DuckburgerDev.DialogueNodes
                 }
             }
 
-
             if (!clickedOnNode || selectedNode.HasOutgoingTransition(selectedTransition))
             {
                 // Delete the pending transition
@@ -254,14 +253,7 @@ namespace DuckburgerDev.DialogueNodes
             }
             else
             {
-                if (selectedNode is NPCDialogueNode)
-                {
-                    selectedTransition.EndNode = selectedNode as NPCDialogueNode;
-                }
-                else
-                {
-                    selectedTransition.EndNode = selectedNode as PlayerDialogueNode;
-                }
+                selectedTransition.EndNode = selectedNode;
                 selectedNode.AddIncomingTransition(selectedTransition);
             }
             makingTransition = false;
@@ -350,26 +342,12 @@ namespace DuckburgerDev.DialogueNodes
                 case UserInteractions.makeTransition:
 
                     Debug.Log($"Making transition");
+                    
                     DialogueTransition newTransition;
-                    if (selectedNode is NPCDialogueNode)
-                    {
-                        NPCDialogueNode npcNode = selectedNode as NPCDialogueNode;
-                        newTransition = new DialogueTransition();
-                        newTransition.Initialize(npcNode, null);
-                        npcNode.AddOutgoingTransition(newTransition);
-                    }
-                    else if (selectedNode is PlayerDialogueNode)
-                    {
-                        PlayerDialogueNode playerNode = selectedNode as PlayerDialogueNode;
-                        newTransition = new DialogueTransition();
-                        newTransition.Initialize(playerNode, null);
-                        playerNode.AddOutgoingTransition(newTransition);
-                    }
-                    else
-                    {
-                        return;
-                    }
-
+                    newTransition = new DialogueTransition();
+                    newTransition.Initialize(selectedNode, null);
+                    selectedNode.AddOutgoingTransition(newTransition);
+                    
                     selectedTransition = newTransition;
                     allTransitions.Add(newTransition);
                     makingTransition = true;
