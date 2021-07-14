@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -84,11 +83,7 @@ namespace DuckburgerDev.DialogueNodes
                 AssetDatabase.Refresh();
             }
             WindowInstance.currentAsset = null;
-
-            // WindowInstance.allTransitions.Clear();
-            // WindowInstance.allNPCNodes.Clear();
-            // WindowInstance.allPlayerNodes.Clear();
-            // WindowInstance.allNodes.Clear();
+            
             WindowInstance.selectedNode = null;
             WindowInstance.selectedTransition = null;
             WindowInstance.makingTransition = false;
@@ -381,12 +376,12 @@ namespace DuckburgerDev.DialogueNodes
 
             if (transitionToDelete.StartNode != null && !string.IsNullOrEmpty(transitionToDelete.StartNode.WindowTitle))
             {
-                transitionToDelete.StartNode.OutgoingTransitions.Remove(transitionToDelete);
+                transitionToDelete.StartNode.RemoveOutgoingTransition(transitionToDelete);
             }
 
             if (transitionToDelete.EndNode != null && !string.IsNullOrEmpty(transitionToDelete.EndNode.WindowTitle))
             {
-                transitionToDelete.EndNode.IncomingTransitions.Remove(transitionToDelete);
+                transitionToDelete.EndNode.RemoveIncomingTransition(transitionToDelete);
             }
         }
 

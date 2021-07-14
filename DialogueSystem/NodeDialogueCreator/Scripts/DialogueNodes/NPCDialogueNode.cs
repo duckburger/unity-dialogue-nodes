@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +7,14 @@ namespace DuckburgerDev.DialogueNodes
     [Serializable]
     public class NPCDialogueNode : DialogueNode
     {
+        private const string ADD_A_SPEAKER_TO_MODIFY = "Add a speaker to modify";
+        private const string CHARACTER_ICON = "Character Icon";
+        private const string CHARACTER_NAME = "Character Name";
+        private const string CHARACTER_TEXT_COLOR = "Character Text Color";
+        private const string DIALOGUE_LINE = "Dialogue Line";
+        private const string ADD_EVENT = "+ Event";
+        private const string REMOVE_EVENT = "- Event";
+        
         public AudioClip lineSoundEffect;
         public DialogueNodeEvent attachedEvent;
 
@@ -43,19 +49,19 @@ namespace DuckburgerDev.DialogueNodes
 
             if (speaker == null)
             {
-                EditorGUILayout.LabelField("Add a speaker to modify");
+                EditorGUILayout.LabelField(ADD_A_SPEAKER_TO_MODIFY);
             }
             else
             {
                 GUILayout.BeginVertical();
-                GUILayout.Label("Character Icon");
+                GUILayout.Label(CHARACTER_ICON);
                 speaker.icon = (Sprite)EditorGUILayout.ObjectField(GUIContent.none, speaker.icon, typeof(Sprite), false, GUILayout.ExpandWidth(true));
-                GUILayout.Label("Character Name");
+                GUILayout.Label(CHARACTER_NAME);
                 speaker.name = EditorGUILayout.TextField(speaker.name);
-                GUILayout.Label("Character Text Color");
+                GUILayout.Label(CHARACTER_TEXT_COLOR);
                 speaker.textColor = EditorGUILayout.ColorField(speaker.textColor);
                 GUILayout.EndVertical();
-                EditorGUILayout.LabelField("Dialogue Line");
+                EditorGUILayout.LabelField(DIALOGUE_LINE);
                 EditorStyles.textField.wordWrap = true;
                 DialogueLine = EditorGUILayout.TextArea(DialogueLine, GUILayout.Height(88f));
                 lineSoundEffect = (AudioClip)EditorGUILayout.ObjectField(lineSoundEffect, typeof(AudioClip), false);
@@ -65,7 +71,7 @@ namespace DuckburgerDev.DialogueNodes
                 if (!attachedEvent)
                 {
                     // TODO: Figure events out
-                    if (GUILayout.Button("+ Event"))
+                    if (GUILayout.Button(ADD_EVENT))
                     {
                         // if (string.IsNullOrEmpty(pathToConvoAsset))
                         // {
@@ -88,13 +94,12 @@ namespace DuckburgerDev.DialogueNodes
                 }
                 else
                 {
-                    windowHeight += 25f;
-                    if (GUILayout.Button("- Event"))
+                    
+                    if (GUILayout.Button(REMOVE_EVENT))
                     {
                         if (attachedEvent)
                         {
                             bool deleted = AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(attachedEvent));
-                            Debug.Log($"Event was deleted = {deleted}");
                             if (!deleted)
                                 attachedEvent = null;
                             AssetDatabase.Refresh();
@@ -103,6 +108,7 @@ namespace DuckburgerDev.DialogueNodes
                     EditorGUILayout.ObjectField(attachedEvent as UnityEngine.Object, typeof(DialogueNodeEvent), false);
                 }
 
+                windowHeight += 25f;
                 EditorGUI.EndChangeCheck();
 
                 Rect updatedRect = new Rect(WindowRect);

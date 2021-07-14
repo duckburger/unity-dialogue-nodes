@@ -11,7 +11,6 @@ namespace DuckburgerDev.DialogueNodes
         public DialogueNode StartNode;
         [SerializeReference]
         public DialogueNode EndNode;
-
         
         public void Initialize(DialogueNode fromNode, DialogueNode toNode)
         {
@@ -72,7 +71,6 @@ namespace DuckburgerDev.DialogueNodes
                 DialogueEditorWindow.WindowInstance.DeleteTransition(this);
             }
 
-            // if (endPlayerNode == null && endNPCNode == null || string.IsNullOrEmpty(endPlayerNode.windowTitle) && string.IsNullOrEmpty(endNPCNode.windowTitle))
             GUI.changed = true;
         }
 

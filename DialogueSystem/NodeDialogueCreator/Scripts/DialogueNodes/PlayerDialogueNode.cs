@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEditor;
+﻿using UnityEditor;
 using UnityEngine;
 
 namespace DuckburgerDev.DialogueNodes
@@ -21,6 +19,12 @@ namespace DuckburgerDev.DialogueNodes
             transitionToAdd.StartNode.PlayerResponses.Add(this);
         }
 
+        public override void RemoveIncomingTransition(DialogueTransition transitionToRemove)
+        {
+            base.RemoveIncomingTransition(transitionToRemove);
+            transitionToRemove.StartNode.PlayerResponses.Remove(this);
+        }
+        
         public override void DrawWindow()
         {
             EditorStyles.textField.wordWrap = true;

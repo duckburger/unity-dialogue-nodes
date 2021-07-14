@@ -19,7 +19,7 @@ public abstract class DialogueNode
     [SerializeField]
     private string _dialogueLine;
     [SerializeField]
-    private string _windowTitle;
+    private string _windowTitle; 
     [SerializeField]
     private Rect _windowRect;
     
@@ -49,6 +49,16 @@ public abstract class DialogueNode
     public virtual void AddOutgoingTransition(DialogueTransition transitionToAdd)
     {
         _outgoingTransitions.Add(transitionToAdd);
+    }
+
+    public virtual void RemoveOutgoingTransition(DialogueTransition transitionToRemove)
+    {
+        _outgoingTransitions.Remove(transitionToRemove);
+    }
+
+    public virtual void RemoveIncomingTransition(DialogueTransition transitionToRemove)
+    {
+        _incomingTransitions.Remove(transitionToRemove);
     }
     public virtual bool HasOutgoingTransition(DialogueTransition transitionToCheck)
     {
