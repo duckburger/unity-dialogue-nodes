@@ -58,10 +58,10 @@ namespace DuckburgerDev.DialogueNodes
 
             Color shadow = new Color(0, 0, 0, 0.06f);
 
-            for (int i = 0; i < 3; i++)
-            {
-                Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, (i + 1) * 0.5f);
-            }
+            // for (int i = 0; i < 3; i++)
+            // {
+            //     Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, (i + 1) * 0.5f);
+            // }
 
             Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, null, 2f);
 

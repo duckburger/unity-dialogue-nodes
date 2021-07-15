@@ -18,7 +18,8 @@ namespace DuckburgerDev.DialogueNodes
         [SerializeField]
         public List<DialogueTransition> allTransitions = new List<DialogueTransition>();
         public ConversationAsset currentAsset;
-        
+
+        private float _mouseWheelZoom = 1;
         private Vector3 mousePos;
         private Vector2 dragDelta;
         private Vector2 gridOffset;
@@ -108,8 +109,11 @@ namespace DuckburgerDev.DialogueNodes
             {
                 EditorUtility.SetDirty(currentAsset);
             }
-            if (GUI.changed) { Repaint(); }
-
+            
+            if (GUI.changed)
+            {
+                Repaint();
+            }
         }
 
         private void DrawGrid(float gridSpacing, float gridOpacity, Color gridColor)
@@ -192,6 +196,11 @@ namespace DuckburgerDev.DialogueNodes
                 {
                     OnDragCanvas(currentEvent.delta);
                 }
+            }
+
+            if (currentEvent.type == EventType.ScrollWheel)
+            {
+                _mouseWheelZoom += currentEvent.delta.y;
             }
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using UnityEditor;
 using UnityEngine;
 
@@ -70,26 +71,23 @@ namespace DuckburgerDev.DialogueNodes
 
                 if (!attachedEvent)
                 {
-                    // TODO: Figure events out
                     if (GUILayout.Button(ADD_EVENT))
                     {
-                        // if (string.IsNullOrEmpty(pathToConvoAsset))
-                        // {
-                        //     pathToConvoAsset = AssetDatabase.GetAssetPath(containingConversation);
-                        // }
-                        // DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
-                        // string directoryName = $"{containingConversation.name}_events";
-                        // string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);
-                        // fullPathToAsset = $"{pathToFolder}\\{containingConversation.name}_Events";
-                        // if (!Directory.Exists(fullPathToAsset))
-                        // {
-                        //     Directory.CreateDirectory(fullPathToAsset);
-                        // }
-                        // AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{containingConversation.allNPCNodes.IndexOf(this)}.asset");
-                        // AssetDatabase.SaveAssets();
-                        // AssetDatabase.Refresh();
-                        // attachedEvent = newEvent;
-                        throw new NotImplementedException();
+                        if (string.IsNullOrEmpty(pathToConvoAsset))
+                        {
+                            pathToConvoAsset = AssetDatabase.GetAssetPath(DialogueEditorWindow.WindowInstance.currentAsset);
+                        }
+                        DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
+                        string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);
+                        fullPathToAsset = $"{pathToFolder}\\{DialogueEditorWindow.WindowInstance.currentAsset.name}-Events";
+                        if (!Directory.Exists(fullPathToAsset))
+                        {
+                            Directory.CreateDirectory(fullPathToAsset);
+                        }
+                        AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{DialogueEditorWindow.WindowInstance.currentAsset.allNPCNodes.IndexOf(this)}.asset");
+                        AssetDatabase.SaveAssets();
+                        AssetDatabase.Refresh();
+                        attachedEvent = newEvent;
                     }
                 }
                 else
@@ -124,14 +122,6 @@ namespace DuckburgerDev.DialogueNodes
             newRect.position += dragDelta;
             WindowRect = newRect;
         }
-
-        #region Interface Requirements
-        
-        public override void SetWindowRect(Rect rect)
-        {
-            WindowRect = rect;
-        }
-        #endregion
     }
 
 }
