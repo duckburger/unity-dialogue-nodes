@@ -27,8 +27,15 @@ namespace DuckburgerDev.DialogueNodes
         
         public override void DrawWindow()
         {
+            windowHeight = 20f;
             EditorStyles.textField.wordWrap = true;
             DialogueLine = EditorGUILayout.TextArea(DialogueLine, GUILayout.Height(88f));
+            windowHeight += 88f;
+            base.DrawWindow();
+            
+            Rect updatedRect = new Rect(WindowRect);
+            updatedRect.height = windowHeight;
+            SetWindowRect(updatedRect);
         }
 
 #endif

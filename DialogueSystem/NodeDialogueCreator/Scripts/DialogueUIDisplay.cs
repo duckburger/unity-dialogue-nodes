@@ -9,6 +9,9 @@ namespace DuckburgerDev.DialogueNodes
 {
     public class DialogueUIDisplay : MonoBehaviour
     {
+        public event Action OnConversationModeActivated;
+        public event Action OnConversationModeDeactivated;
+        
         [Space(10)]
         [SerializeField]
         private ConversationAsset _currentConversationAsset;
@@ -141,6 +144,7 @@ namespace DuckburgerDev.DialogueNodes
                 return;
             }
 
+            OnConversationModeActivated?.Invoke();
             if (_skipButton != null)
             {
                 if (_currentConversationAsset.skippable)
@@ -310,6 +314,7 @@ namespace DuckburgerDev.DialogueNodes
             AnimateOut();
             DestroyAllReplyNodes();
             _onCurrentConvoCompleted?.Invoke();
+            OnConversationModeDeactivated?.Invoke();
         }
 
         public void Continue()

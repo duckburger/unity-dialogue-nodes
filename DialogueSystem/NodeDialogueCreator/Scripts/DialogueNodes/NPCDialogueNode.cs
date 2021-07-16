@@ -8,33 +8,14 @@ namespace DuckburgerDev.DialogueNodes
     [Serializable]
     public class NPCDialogueNode : DialogueNode
     {
-        private const string ADD_A_SPEAKER_TO_MODIFY = "Add a speaker to modify";
-        private const string CHARACTER_ICON = "Character Icon";
-        private const string CHARACTER_NAME = "Character Name";
-        private const string CHARACTER_TEXT_COLOR = "Character Text Color";
-        private const string DIALOGUE_LINE = "Dialogue Line";
-        private const string ADD_EVENT = "+ Event";
-        private const string REMOVE_EVENT = "- Event";
-        
         public AudioClip lineSoundEffect;
-        public DialogueNodeEvent attachedEvent;
-
-        float windowHeight = 0;
-
-        #region Paths
-
-        string pathToConvoAsset;
-        string fullPathToAsset;
-
-        #endregion
-        
         public DialogueCharacter speaker;
 
 #if UNITY_EDITOR
 
         public NPCDialogueNode(Rect rect, string title) : base(rect, title)
         {
-            
+            // Empty   
         }
 
         public override void AddIncomingTransition(DialogueTransition transitionToAdd)
@@ -46,7 +27,7 @@ namespace DuckburgerDev.DialogueNodes
         public override void DrawWindow()
         {
             speaker = (DialogueCharacter)EditorGUILayout.ObjectField(speaker, typeof(DialogueCharacter), false);
-            windowHeight = 350f;
+            windowHeight = 245f;
 
             if (speaker == null)
             {
@@ -55,8 +36,6 @@ namespace DuckburgerDev.DialogueNodes
             else
             {
                 GUILayout.BeginVertical();
-                GUILayout.Label(CHARACTER_ICON);
-                speaker.icon = (Sprite)EditorGUILayout.ObjectField(GUIContent.none, speaker.icon, typeof(Sprite), false, GUILayout.ExpandWidth(true));
                 GUILayout.Label(CHARACTER_NAME);
                 speaker.name = EditorGUILayout.TextField(speaker.name);
                 GUILayout.Label(CHARACTER_TEXT_COLOR);
@@ -67,47 +46,7 @@ namespace DuckburgerDev.DialogueNodes
                 DialogueLine = EditorGUILayout.TextArea(DialogueLine, GUILayout.Height(88f));
                 lineSoundEffect = (AudioClip)EditorGUILayout.ObjectField(lineSoundEffect, typeof(AudioClip), false);
 
-                EditorGUI.BeginChangeCheck();
-
-                if (!attachedEvent)
-                {
-                    if (GUILayout.Button(ADD_EVENT))
-                    {
-                        if (string.IsNullOrEmpty(pathToConvoAsset))
-                        {
-                            pathToConvoAsset = AssetDatabase.GetAssetPath(DialogueEditorWindow.WindowInstance.currentAsset);
-                        }
-                        DialogueNodeEvent newEvent = ScriptableObject.CreateInstance<DialogueNodeEvent>();
-                        string pathToFolder = Path.GetDirectoryName(pathToConvoAsset);
-                        fullPathToAsset = $"{pathToFolder}\\{DialogueEditorWindow.WindowInstance.currentAsset.name}-Events";
-                        if (!Directory.Exists(fullPathToAsset))
-                        {
-                            Directory.CreateDirectory(fullPathToAsset);
-                        }
-                        AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{DialogueEditorWindow.WindowInstance.currentAsset.allNPCNodes.IndexOf(this)}.asset");
-                        AssetDatabase.SaveAssets();
-                        AssetDatabase.Refresh();
-                        attachedEvent = newEvent;
-                    }
-                }
-                else
-                {
-                    
-                    if (GUILayout.Button(REMOVE_EVENT))
-                    {
-                        if (attachedEvent)
-                        {
-                            bool deleted = AssetDatabase.DeleteAsset(AssetDatabase.GetAssetPath(attachedEvent));
-                            if (!deleted)
-                                attachedEvent = null;
-                            AssetDatabase.Refresh();
-                        }
-                    }
-                    EditorGUILayout.ObjectField(attachedEvent as UnityEngine.Object, typeof(DialogueNodeEvent), false);
-                }
-
-                windowHeight += 25f;
-                EditorGUI.EndChangeCheck();
+                base.DrawWindow();
 
                 Rect updatedRect = new Rect(WindowRect);
                 updatedRect.height = windowHeight;

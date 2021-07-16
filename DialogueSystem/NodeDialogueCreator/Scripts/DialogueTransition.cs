@@ -56,13 +56,6 @@ namespace DuckburgerDev.DialogueNodes
             Vector3 startTan = startPos + Vector3.right * 50f;
             Vector3 endTan = endPos + Vector3.left * 50f;
 
-            Color shadow = new Color(0, 0, 0, 0.06f);
-
-            // for (int i = 0; i < 3; i++)
-            // {
-            //     Handles.DrawBezier(startPos, endPos, startTan, endTan, shadow, null, (i + 1) * 0.5f);
-            // }
-
             Handles.DrawBezier(startPos, endPos, startTan, endTan, Color.black, null, 2f);
 
 
