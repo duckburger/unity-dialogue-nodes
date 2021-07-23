@@ -68,11 +68,12 @@ public abstract class DialogueNode
                 {
                     Directory.CreateDirectory(fullPathToAsset);
                 }
-                AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{DialogueEditorWindow.WindowInstance.currentAsset.allNPCNodes.IndexOf(this)}.asset");
+                AssetDatabase.CreateAsset(newEvent, $"{fullPathToAsset}\\EventForNode#{this.GetHashCode()}.asset");
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
                 attachedEvent = newEvent;
             }
+            attachedEvent = (DialogueNodeEvent)EditorGUILayout.ObjectField(attachedEvent, typeof(DialogueNodeEvent), false);
         }
         else
         {
@@ -87,9 +88,9 @@ public abstract class DialogueNode
                     AssetDatabase.Refresh();
                 }
             }
-            EditorGUILayout.ObjectField(attachedEvent as UnityEngine.Object, typeof(DialogueNodeEvent), false);
-            windowHeight += 15f;
+            attachedEvent = (DialogueNodeEvent)EditorGUILayout.ObjectField(attachedEvent, typeof(DialogueNodeEvent), false);
         }
+        windowHeight += 15f;
         EditorGUI.EndChangeCheck();
 
     }

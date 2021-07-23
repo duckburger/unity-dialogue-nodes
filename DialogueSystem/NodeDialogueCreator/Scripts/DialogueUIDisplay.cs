@@ -196,7 +196,6 @@ namespace DuckburgerDev.DialogueNodes
                     _audioSource.clip = npcNode.lineSoundEffect;
                     _audioSource.Play();
                 }
-                npcNode?.attachedEvent?.Raise();
             }
 
             if (npcNode != null)
@@ -215,6 +214,8 @@ namespace DuckburgerDev.DialogueNodes
                 yield return null;
             }
 
+            npcNode?.attachedEvent?.Raise();
+            
             if (_currentNode.PlayerResponses.Count > 0)
             {
                 // Display player responses
